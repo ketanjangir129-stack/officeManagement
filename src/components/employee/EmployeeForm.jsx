@@ -50,13 +50,14 @@ function EmployeeForm({ onClose }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid grid-cols-1 md:grid-cols-2 gap-5"
+      className="grid grid-cols-1 md:grid-cols-2 gap-5 hide-scrollbar"
     >
       <input
         name="employeeId"
         placeholder="Employee ID"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -64,6 +65,7 @@ function EmployeeForm({ onClose }) {
         placeholder="First Name"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -71,6 +73,7 @@ function EmployeeForm({ onClose }) {
         placeholder="Last Name"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -78,6 +81,7 @@ function EmployeeForm({ onClose }) {
         placeholder="Email"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -85,6 +89,7 @@ function EmployeeForm({ onClose }) {
         placeholder="Phone"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -92,13 +97,15 @@ function EmployeeForm({ onClose }) {
         placeholder="Father Name"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
-        type="date"
         name="dob"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        placeholder="Date of Birth"
+        required
       />
 
       <input
@@ -106,6 +113,7 @@ function EmployeeForm({ onClose }) {
         placeholder="Department"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -113,13 +121,15 @@ function EmployeeForm({ onClose }) {
         placeholder="Designation"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
-        type="date"
         name="joiningDate"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        placeholder="Joining Date"
+        required
       />
 
       <input
@@ -127,6 +137,7 @@ function EmployeeForm({ onClose }) {
         placeholder="Vehicle Number"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -134,6 +145,7 @@ function EmployeeForm({ onClose }) {
         placeholder="City"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -141,6 +153,7 @@ function EmployeeForm({ onClose }) {
         placeholder="State"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -148,6 +161,7 @@ function EmployeeForm({ onClose }) {
         placeholder="Pincode"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <textarea
@@ -160,6 +174,7 @@ function EmployeeForm({ onClose }) {
         p-3
         md:col-span-2
         "
+        required
       />
 
       <button
