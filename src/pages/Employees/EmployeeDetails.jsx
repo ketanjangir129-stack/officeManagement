@@ -126,13 +126,7 @@ function EmployeeDetails() {
                 {/* Banner */}
 
                 <div
-                    className="
-                        h-25
-                        bg-gradient-to-r
-                        from-violet-600
-                        via-purple-600
-                        to-indigo-600
-                    "
+                    className="h-25 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600"
                 />
 
                 {/* Profile Content */}
