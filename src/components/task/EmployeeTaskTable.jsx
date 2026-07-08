@@ -1,4 +1,3 @@
-import "./EmployeeTaskTable.css";
 
 function EmployeeTaskTable({
   employees,

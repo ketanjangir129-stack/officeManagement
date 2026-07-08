@@ -3,11 +3,13 @@ import AddEmployeeModal from "../../components/employee/AddEmployeeModal";
 import { useEmployees } from "../../context/EmployeeContext";
 import SearchFilter from "../../components/common/SearchFilter";
 import {searchFilter} from "../../utils/searchFilter";
+import { useNavigate } from "react-router-dom";
 
 function Employees() {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState("");
   const { employees } = useEmployees();
+  const navigate = useNavigate();
 
   const filteredEmployees = searchFilter(
     employees, 
@@ -112,6 +114,7 @@ function Employees() {
                     duration-200
                     cursor-pointer
                     "
+                    onClick={() => navigate(`/employees/${employee.id}`)}
                   >
                     <td className="py-4 px-6 text-sm font-semibold text-slate-700">
                       {employee.employeeId}

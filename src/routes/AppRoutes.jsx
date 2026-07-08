@@ -8,6 +8,7 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import Employees from "../pages/Employees/Employees";
 
 import TaskDashboard from "../pages/task/TaskDashboard";
+import EmployeeDetails from "../pages/Employees/EmployeeDetails";
 
 
 const AppRoutes = () => {
@@ -17,6 +18,7 @@ const AppRoutes = () => {
       <Route element={<DashboardLayout />}>
         <Route path="/" element={<Dashboard />}/>
         <Route path="/employees" element={<Employees />}/>
+        <Route path="/employees/:id" element={<EmployeeDetails />}/>
         <Route path="/tasks" element={<TaskDashboard />}/>
 
       </Route>

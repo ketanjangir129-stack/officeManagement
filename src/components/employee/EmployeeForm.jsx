@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEmployees } from "../../context/EmployeeContext";
+import { toast } from "react-toastify";
 
 function EmployeeForm({ onClose }) {
   const { addEmployee } = useEmployees();
@@ -38,6 +39,8 @@ function EmployeeForm({ onClose }) {
       console.log("Employee Saved Successfully");
 
       onClose();
+      toast.success("Employee added successfully!");
+
     } catch (error) {
       console.error("Save Error:", error);
     }
