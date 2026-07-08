@@ -1,13 +1,19 @@
 import { useState } from "react";
-
 import AddEmployeeModal from "../../components/employee/AddEmployeeModal";
-
 import { useEmployees } from "../../context/EmployeeContext";
+import SearchFilter from "../../components/common/SearchFilter";
+import {searchFilter} from "../../utils/searchFilter";
 
 function Employees() {
   const [openModal, setOpenModal] = useState(false);
-
+  const [search, setSearch] = useState("");
   const { employees } = useEmployees();
+
+  const filteredEmployees = searchFilter(
+    employees, 
+    search, 
+    ["fullName", "employeeId"]
+  );
 
   return (
     <div className="space-y-6">
@@ -44,6 +50,11 @@ function Employees() {
         </button>
       </div>
 
+      {/* Search Bar */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <SearchFilter value={search} onChange={setSearch} placeholder="Search employee...." />
+      </div>
+
       {/* Employee Table */}
 
       <div
@@ -67,7 +78,7 @@ function Employees() {
                 "
               >
                 <th className="py-4 px-6 text-left text-sm font-semibold text-slate-600 uppercase tracking-wide">
-                  S.No
+                  ID
                 </th>
 
                 <th className="py-4 px-6 text-left text-sm font-semibold text-slate-600 uppercase tracking-wide">
@@ -89,8 +100,8 @@ function Employees() {
             </thead>
 
             <tbody>
-              {employees.length > 0 ? (
-                employees.map((employee, index) => (
+              {filteredEmployees.length > 0 ? (
+                filteredEmployees.map((employee) => (
                   <tr
                     key={employee.id}
                     className="
@@ -103,7 +114,7 @@ function Employees() {
                     "
                   >
                     <td className="py-4 px-6 text-sm font-semibold text-slate-700">
-                      {index + 1}
+                      {employee.employeeId}
                     </td>
 
                     <td className="py-4 px-6">
