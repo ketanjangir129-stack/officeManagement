@@ -6,7 +6,7 @@ function EmployeeForm({ onClose }) {
   const { addEmployee } = useEmployees();
 
   const [formData, setFormData] = useState({
-    employeeId: "",
+    employeeId: "JAI"+" ",
     fullName: "",
     email: "",
     phone: "",

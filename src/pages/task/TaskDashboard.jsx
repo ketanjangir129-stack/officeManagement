@@ -5,6 +5,7 @@ import SearchFilter from "../../components/common/SearchFilter";
 import AssignTaskModal from "../../components/task/AssignTaskModal";
 import { createTask } from "../../services/taskService";
 import { assignTaskToEmployee } from "../../services/employeeService";
+import { toast } from "react-toastify";
 
 function TaskDashboard() {
   const { employees } = useEmployees();
@@ -53,7 +54,7 @@ function TaskDashboard() {
           result.id
         );
 
-        alert("Task Assigned Successfully");
+        toast.success("Task Assigned Successfully");
 
         closeModal();
       }
