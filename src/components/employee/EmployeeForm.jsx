@@ -6,11 +6,9 @@ function EmployeeForm({ onClose }) {
 
   const [formData, setFormData] = useState({
     employeeId: "",
-    firstName: "",
-    lastName: "",
+    fullName: "",
     email: "",
     phone: "",
-    fatherName: "",
     dob: "",
     gender: "",
     department: "",
@@ -20,8 +18,11 @@ function EmployeeForm({ onClose }) {
     city: "",
     state: "",
     pincode: "",
-    vehicleNumber: "",
     status: "Active",
+    assignedTasks:{
+      
+    },
+
   });
 
   const handleChange = (e) => {
@@ -60,15 +61,8 @@ function EmployeeForm({ onClose }) {
       />
 
       <input
-        name="firstName"
-        placeholder="First Name"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-      />
-
-      <input
-        name="lastName"
-        placeholder="Last Name"
+        name="fullName"
+        placeholder="Full Name"
         onChange={handleChange}
         className="border rounded-xl p-3"
       />
@@ -88,27 +82,6 @@ function EmployeeForm({ onClose }) {
       />
 
       <input
-        name="fatherName"
-        placeholder="Father Name"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-      />
-
-      <input
-        type="date"
-        name="dob"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-      />
-
-      <input
-        name="department"
-        placeholder="Department"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-      />
-
-      <input
         name="designation"
         placeholder="Designation"
         onChange={handleChange}
@@ -122,12 +95,6 @@ function EmployeeForm({ onClose }) {
         className="border rounded-xl p-3"
       />
 
-      <input
-        name="vehicleNumber"
-        placeholder="Vehicle Number"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-      />
 
       <input
         name="city"
