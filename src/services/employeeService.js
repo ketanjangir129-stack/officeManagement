@@ -1,22 +1,24 @@
+import { update, ref } from "firebase/database";
 import { db } from "../firebase/firebase";
-import { ref, onValue } from "firebase/database";
 
-export const subscribeEmployees = (callback) => {
-  const employeeRef = ref(db, "employees");
+export const assignTaskToEmployee = async (employeeId, taskId) => {
+  try {
+    await update(ref(db, `employees/${employeeId}`), {
+      [`assignedTasks/${taskId}`]: {
+        status: "Pending",
+        assignedAt: Date.now(),
+      },
+    });
 
-  return onValue(employeeRef, (snapshot) => {
-    if (!snapshot.exists()) {
-      callback([]);
-      return;
-    }
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Assign Task Error:", error);
 
-    const data = snapshot.val();
-
-    const employees = Object.keys(data).map((key) => ({
-      id: key,
-      ...data[key],
-    }));
-
-    callback(employees);
-  });
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
 };

@@ -1,6 +1,7 @@
 // components/common/Sidebar.jsx
 import {MdDashboard,MdPeople,} from "react-icons/md";
 import { NavLink } from "react-router-dom";
+import { SiGoogletasks } from "react-icons/si";
 
 function Sidebar() {
   return (
@@ -54,6 +55,20 @@ function Sidebar() {
         >
           <MdPeople size={20} />
           Task Mangement
+        </NavLink>
+
+        <NavLink
+          to="/tasks"
+          className={({ isActive }) =>
+            `flex items-center gap-2 p-3 rounded-lg transition-colors ${
+              isActive
+                ? "bg-violet-600 text-white"
+                : "hover:bg-slate-700"
+            }`
+          }
+        >
+          <SiGoogletasks size={20} />
+          Tasks
         </NavLink>
 
       </nav>
