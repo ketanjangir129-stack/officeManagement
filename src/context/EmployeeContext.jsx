@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { ref, onValue, push, set } from "firebase/database";
+import { ref, onValue, push, set, update, remove } from "firebase/database";
 
 import { db } from "../firebase/firebase";
 
@@ -52,6 +52,33 @@ export const EmployeeProvider = ({ children }) => {
   }
 };
 
+  // update Employee
+  const updateEmployee = async (employeeId,updatedData) => {
+    try {
+      await update(
+        ref(db, `employees/${employeeId}`),
+        updatedData
+      );
+
+      console.log("Employee Updated");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // delete Employee
+  const deleteEmployee = async (employeeId) => {
+    try {
+      await remove(
+        ref(db, `employees/${employeeId}`)
+      );
+
+      console.log("Employee Deleted");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchEmployees();
   }, []);
@@ -62,6 +89,8 @@ export const EmployeeProvider = ({ children }) => {
         employees,
         loading,
         addEmployee,
+        updateEmployee,
+        deleteEmployee,
       }}
     >
       {children}
