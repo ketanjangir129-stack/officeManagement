@@ -83,7 +83,7 @@ function Employees() {
                 </th>
 
                 <th className="py-4 px-6 text-left text-sm font-semibold text-slate-600 uppercase tracking-wide">
-                  Department
+                  Designation
                 </th>
               </tr>
             </thead>
@@ -127,7 +127,7 @@ function Employees() {
                       {employee.phone}
                     </td>
                     <td className="py-4 px-6 text-sm font-medium text-slate-600">
-                      {employee.department}
+                      {employee.designation}
                     </td>
                   </tr>
                 ))

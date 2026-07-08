@@ -10,8 +10,6 @@ function EmployeeForm({ onClose }) {
     email: "",
     phone: "",
     dob: "",
-    gender: "",
-    department: "",
     designation: "",
     joiningDate: "",
     address: "",
@@ -19,10 +17,7 @@ function EmployeeForm({ onClose }) {
     state: "",
     pincode: "",
     status: "Active",
-    assignedTasks:{
-      
-    },
-
+    assignedTasks: {},
   });
 
   const handleChange = (e) => {
@@ -38,129 +33,378 @@ function EmployeeForm({ onClose }) {
     console.log("Form Data:", formData);
 
     try {
-        await addEmployee(formData);
+      await addEmployee(formData);
 
-        console.log("Employee Saved Successfully");
+      console.log("Employee Saved Successfully");
 
-        onClose();
+      onClose();
     } catch (error) {
-        console.error("Save Error:", error);
+      console.error("Save Error:", error);
     }
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid grid-cols-1 md:grid-cols-2 gap-5 hide-scrollbar"
+      className="space-y-8"
     >
-      <input
-        name="employeeId"
-        placeholder="Employee ID"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-        required
-      />
 
-      <input
-        name="fullName"
-        placeholder="Full Name"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-        required
-      />
+      {/* Form Fields */}
 
-      <input
-        name="email"
-        placeholder="Email"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-        required
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Employee ID */}
 
-      <input
-        name="phone"
-        placeholder="Phone"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-        required
-      />
+        <div>
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            Employee ID
+          </label>
 
+          <input
+            name="employeeId"
+            placeholder="EMP001"
+            onChange={handleChange}
+            required
+            className="
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            bg-white
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-violet-500
+            focus:ring-4
+            focus:ring-violet-100
+            "
+          />
+        </div>
 
-      <input
-        name="dob"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-        placeholder="Date of Birth"
-        required
-      />
+        {/* Full Name */}
 
-      <input
-        name="department"
-        placeholder="Department"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-        required
-      />
+        <div>
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            Full Name
+          </label>
 
+          <input
+            name="fullName"
+            placeholder="John Doe"
+            onChange={handleChange}
+            required
+            className="
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-violet-500
+            focus:ring-4
+            focus:ring-violet-100
+            "
+          />
+        </div>
 
-      <input
-        name="joiningDate"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-        placeholder="Joining Date"
-        required
-      />
-      <input
-        name="city"
-        placeholder="City"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-        required
-      />
+        {/* Email */}
 
-      <input
-        name="state"
-        placeholder="State"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-        required
-      />
+        <div>
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            Email Address
+          </label>
 
-      <input
-        name="pincode"
-        placeholder="Pincode"
-        onChange={handleChange}
-        className="border rounded-xl p-3"
-        required
-      />
+          <input
+            name="email"
+            placeholder="john@example.com"
+            onChange={handleChange}
+            required
+            className="
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-violet-500
+            focus:ring-4
+            focus:ring-violet-100
+            "
+          />
+        </div>
 
-      <textarea
-        name="address"
-        placeholder="Address"
-        onChange={handleChange}
-        className="
-        border
-        rounded-xl
-        p-3
-        md:col-span-2
-        "
-        required
-      />
+        {/* Phone */}
 
-      <button
-        type="submit"
-        className="
-        md:col-span-2
-        bg-violet-600
-        text-white
-        py-3
-        rounded-xl
-        font-medium
-        hover:bg-violet-700
-        "
-      >
-        Save Employee
-      </button>
+        <div>
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            Phone Number
+          </label>
+
+          <input
+            name="phone"
+            placeholder="+91 9876543210"
+            onChange={handleChange}
+            required
+            className="
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-violet-500
+            focus:ring-4
+            focus:ring-violet-100
+            "
+          />
+        </div>
+
+        {/* DOB */}
+
+        <div>
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            Date of Birth
+          </label>
+
+          <input
+            name="dob"
+            placeholder="DD/MM/YYYY"
+            onChange={handleChange}
+            required
+            className="
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-violet-500
+            focus:ring-4
+            focus:ring-violet-100
+            "
+          />
+        </div>
+
+        {/* Designation */}
+
+        <div>
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            Designation
+          </label>
+
+          <input
+            name="designation"
+            placeholder="Frontend Developer"
+            onChange={handleChange}
+            required
+            className="
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-violet-500
+            focus:ring-4
+            focus:ring-violet-100
+            "
+          />
+        </div>
+
+        {/* Joining Date */}
+
+        <div>
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            Joining Date
+          </label>
+
+          <input
+            name="joiningDate"
+            placeholder="DD/MM/YYYY"
+            onChange={handleChange}
+            required
+            className="
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-violet-500
+            focus:ring-4
+            focus:ring-violet-100
+            "
+          />
+        </div>
+
+        {/* City */}
+
+        <div>
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            City
+          </label>
+
+          <input
+            name="city"
+            placeholder="Jaipur"
+            onChange={handleChange}
+            required
+            className="
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-violet-500
+            focus:ring-4
+            focus:ring-violet-100
+            "
+          />
+        </div>
+
+        {/* State */}
+
+        <div>
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            State
+          </label>
+
+          <input
+            name="state"
+            placeholder="Rajasthan"
+            onChange={handleChange}
+            required
+            className="
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-violet-500
+            focus:ring-4
+            focus:ring-violet-100
+            "
+          />
+        </div>
+
+        {/* Pincode */}
+
+        <div>
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            Pincode
+          </label>
+
+          <input
+            name="pincode"
+            placeholder="302001"
+            onChange={handleChange}
+            required
+            className="
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-violet-500
+            focus:ring-4
+            focus:ring-violet-100
+            "
+          />
+        </div>
+
+        {/* Address */}
+
+        <div className="md:col-span-2">
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            Address
+          </label>
+
+          <textarea
+            name="address"
+            placeholder="Enter full address..."
+            onChange={handleChange}
+            required
+            rows={4}
+            className="
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            px-4
+            py-3
+            outline-none
+            resize-none
+            transition
+            focus:border-violet-500
+            focus:ring-4
+            focus:ring-violet-100
+            "
+          />
+        </div>
+      </div>
+
+      {/* Footer */}
+
+      <div className="flex justify-end gap-3 border-slate-200">
+        <button
+          type="button"
+          onClick={onClose}
+          className="
+          px-5
+          py-3
+          rounded-xl
+          border
+          border-slate-300
+          font-medium
+          text-slate-700
+          hover:bg-slate-50
+          transition
+          cursor-pointer
+          "
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          className="
+          px-6
+          py-3
+          rounded-xl
+          bg-violet-600
+          text-white
+          font-medium
+          shadow-sm
+          hover:bg-violet-700
+          hover:shadow-md
+          transition-all
+          cursor-pointer
+          "
+        >
+          Save Employee
+        </button>
+      </div>
     </form>
   );
 }

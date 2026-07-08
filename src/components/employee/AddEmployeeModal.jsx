@@ -22,6 +22,7 @@ function AddEmployeeModal({ open, onClose }) {
         rounded-3xl
         p-6
         shadow-xl
+        hide-scrollbar
         "
       >
         <div className="flex justify-between items-center mb-6">
