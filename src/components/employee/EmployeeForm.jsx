@@ -51,20 +51,25 @@ function EmployeeForm({ onClose }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid grid-cols-1 md:grid-cols-2 gap-5"
+      className="grid grid-cols-1 md:grid-cols-2 gap-5 hide-scrollbar"
     >
       <input
         name="employeeId"
         placeholder="Employee ID"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
-        name="fullName"
+name="fullName"
         placeholder="Full Name"
+
+        name="firstName"
+        placeholder="First Name"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -72,6 +77,7 @@ function EmployeeForm({ onClose }) {
         placeholder="Email"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -79,28 +85,40 @@ function EmployeeForm({ onClose }) {
         placeholder="Phone"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
+
       <input
-        name="designation"
-        placeholder="Designation"
+        name="dob"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        placeholder="Date of Birth"
+        required
       />
 
       <input
-        type="date"
+        name="department"
+        placeholder="Department"
+        onChange={handleChange}
+        className="border rounded-xl p-3"
+        required
+      />
+
+
+      <input
         name="joiningDate"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        placeholder="Joining Date"
+        required
       />
-
-
       <input
         name="city"
         placeholder="City"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -108,6 +126,7 @@ function EmployeeForm({ onClose }) {
         placeholder="State"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <input
@@ -115,6 +134,7 @@ function EmployeeForm({ onClose }) {
         placeholder="Pincode"
         onChange={handleChange}
         className="border rounded-xl p-3"
+        required
       />
 
       <textarea
@@ -127,6 +147,7 @@ function EmployeeForm({ onClose }) {
         p-3
         md:col-span-2
         "
+        required
       />
 
       <button

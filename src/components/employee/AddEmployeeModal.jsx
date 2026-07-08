@@ -31,7 +31,7 @@ function AddEmployeeModal({ open, onClose }) {
 
           <button
             onClick={onClose}
-            className="text-2xl"
+            className="cursor-pointer text-3xl bg-red-500 text-white rounded-full w-8 h-8 flex justify-center items-center hover:bg-red-600 transition-all"
           >
             ×
           </button>
