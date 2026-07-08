@@ -115,7 +115,7 @@ function Employees() {
                         transition-colors
                         "
                       >
-                        {employee.firstName} {employee.lastName}
+                        {employee.fullName}
                       </h3>
                     </td>
 

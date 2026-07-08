@@ -62,11 +62,8 @@ function EmployeeForm({ onClose }) {
       />
 
       <input
-name="fullName"
+        name="fullName"
         placeholder="Full Name"
-
-        name="firstName"
-        placeholder="First Name"
         onChange={handleChange}
         className="border rounded-xl p-3"
         required
