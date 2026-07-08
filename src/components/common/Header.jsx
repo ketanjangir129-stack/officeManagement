@@ -1,7 +1,3 @@
-// components/common/Header.jsx
-
-import { FiSearch } from "react-icons/fi";
-
 function Header() {
   return (
     <header className="bg-white px-4 md:px-6 py-4 border-b border-gray-200">
@@ -9,32 +5,9 @@ function Header() {
         
         {/* Search */}
         <div className="relative w-full sm:max-w-md">
-          <FiSearch
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-          />
-
-          <input
-            type="text"
-            placeholder="Search employees, tasks..."
-            className="
-              w-full
-              pl-11
-              pr-4
-              py-2.5
-              bg-gray-50
-              border
-              border-gray-200
-              rounded-xl
-              outline-none
-              transition-all
-              duration-200
-              focus:bg-white
-              focus:border-violet-500
-              focus:ring-4
-              focus:ring-violet-100
-            "
-          />
+          <p className="text-lg font-semibold text-gray-900">
+            Welcome, to the Employee Management System
+          </p>
         </div>
 
         {/* Profile */}
