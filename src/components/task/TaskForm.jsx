@@ -7,13 +7,15 @@ function TaskForm({
   onSubmit,
   isSubmitting = false,
 }) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({"-Task001": {
+    
     title: initialData.title || "",
     description: initialData.description || "",
     priority: initialData.priority || "Medium",
     deadline: initialData.deadline || "",
     assignedEmployees: initialData.assignedEmployees || {},
-  });
+  
+  }});
 
   const [errors, setErrors] = useState({});
 

@@ -42,6 +42,19 @@ function Sidebar() {
           <MdPeople size={20} />
           Employees
         </NavLink>
+         <NavLink
+          to="/Tasks"
+          className={({ isActive }) =>
+            `flex items-center gap-2 p-3 rounded-lg transition-colors ${
+              isActive
+                ? "bg-violet-600 text-white"
+                : "hover:bg-slate-700"
+            }`
+          }
+        >
+          <MdPeople size={20} />
+          Task Mangement
+        </NavLink>
 
       </nav>
     </aside>

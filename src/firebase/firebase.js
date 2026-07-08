@@ -20,3 +20,4 @@ export const db = getDatabase(app);
 export const storage = getStorage(app);
 
 export default app;
+
