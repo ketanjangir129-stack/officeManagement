@@ -43,7 +43,7 @@ function Sidebar() {
           <MdPeople size={20} />
           Employees
         </NavLink>
-
+      
         <NavLink
           to="/tasks"
           className={({ isActive }) =>

@@ -1,25 +1,71 @@
 import { useState } from "react";
-import { FiSearch } from "react-icons/fi";
 import { useEmployees } from "../../context/EmployeeContext";
 import { searchFilter } from "../../utils/searchFilter";
 import SearchFilter from "../../components/common/SearchFilter";
-
+import AssignTaskModal from "../../components/task/AssignTaskModal";
+import { createTask } from "../../services/taskService";
+import { assignTaskToEmployee } from "../../services/employeeService";
 
 function TaskDashboard() {
-  const [search, setSearch] = useState("");
-
   const { employees } = useEmployees();
 
-  {/*serach users */}
-  const filteredEmployees = searchFilter(
-        employees, 
-        search, 
-        ["fullName", "employeeId"]
-    );
+  const [search, setSearch] = useState("");
 
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+
+  const [showAssignModal, setShowAssignModal] = useState(false);
+
+  const filteredEmployees = searchFilter(
+    employees,
+    search,
+    ["fullName", "employeeId"]
+  );
+
+  // Open Modal
+  const handleAssignClick = (employee) => {
+    setSelectedEmployee(employee);
+    setShowAssignModal(true);
+  };
+
+  // Close Modal
+  const closeModal = () => {
+    setSelectedEmployee(null);
+    setShowAssignModal(false);
+  };
+
+  // Save Task
+  const handleAssignTask = async (taskData) => {
+    try {
+      const result = await createTask({
+        ...taskData,
+
+        assignedEmployees: {
+          [selectedEmployee.id]: {
+            name: selectedEmployee.fullName,
+            status: "Pending",
+          },
+        },
+      });
+
+      if (result.success) {
+        await assignTaskToEmployee(
+          selectedEmployee.id,
+          result.id
+        );
+
+        alert("Task Assigned Successfully");
+
+        closeModal();
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong");
+    }
+  };
 
   return (
     <div className="space-y-6">
+
       {/* Header */}
 
       <div>
@@ -34,156 +80,142 @@ function TaskDashboard() {
 
       {/* Search */}
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
-        <SearchFilter value={search} onChange={setSearch} placeholder="Search employee...." />
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <SearchFilter
+          value={search}
+          onChange={setSearch}
+          placeholder="Search employee..."
+        />
       </div>
 
       {/* Table */}
 
-      <div
-        className="
-        bg-white
-        rounded-3xl
-        border
-        border-slate-200
-        shadow-sm
-        overflow-hidden
-        "
-      >
+      <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+
         <div className="overflow-x-auto">
+
           <table className="w-full">
+
             <thead>
-              <tr
-                className="
-                bg-slate-50
-                border-b
-                border-slate-200
-                "
-              >
-                <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase">
+
+              <tr className="border-b border-slate-200 bg-slate-50">
+
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
                   ID
                 </th>
 
-                <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase">
-                  Employee Name
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+                  Employee
                 </th>
 
-                <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase">
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
                   Designation
                 </th>
 
-                <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase">
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
                   Email
                 </th>
 
-                <th className="px-6 py-4 text-center text-sm font-semibold text-slate-600 uppercase">
+                <th className="px-6 py-4 text-center text-sm font-semibold uppercase text-slate-600">
+                  Tasks
+                </th>
+
+                <th className="px-6 py-4 text-center text-sm font-semibold uppercase text-slate-600">
                   Action
                 </th>
+
               </tr>
+
             </thead>
 
             <tbody>
+
               {filteredEmployees.length > 0 ? (
+
                 filteredEmployees.map((employee) => (
+
                   <tr
                     key={employee.id}
-                    className="
-                    border-b
-                    border-slate-100
-                    hover:bg-violet-50/40
-                    transition-all
-                    "
+                    className="border-b border-slate-100 transition hover:bg-violet-50"
                   >
+
                     <td className="px-6 py-4 font-medium text-slate-700">
                       {employee.employeeId}
                     </td>
 
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="
-                          h-10
-                          w-10
-                          rounded-full
-                          bg-violet-100
-                          text-violet-600
-                          flex
-                          items-center
-                          justify-center
-                          font-semibold
-                          "
-                        >
-                          {employee.fullName.charAt(0)}
-                        </div>
-
-                        <span className="font-medium text-slate-800">
-                          {employee.fullName}
-                        </span>
-                      </div>
+                    <td className="px-6 py-4 font-medium text-slate-800">
+                      {employee.fullName}
                     </td>
 
                     <td className="px-6 py-4 text-slate-600">
                       {employee.designation}
                     </td>
 
-                    <td className="px-6 py-4">
-                      <span
-                        className="
-                        inline-flex
-                        items-center
-                        rounded-full
-                        bg-green-100
-                        px-3
-                        py-1
-                        text-xs
-                        font-semibold
-                        text-green-700
-                        "
-                      >
-                        {employee.email}
-                      </span>
+                    <td className="px-6 py-4 text-slate-600">
+                      {employee.email}
                     </td>
 
                     <td className="px-6 py-4 text-center">
+
+                      <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
+
+                        {employee.assignedTasks
+                          ? Object.keys(employee.assignedTasks).length
+                          : 0}
+
+                      </span>
+
+                    </td>
+
+                    <td className="px-6 py-4 text-center">
+
                       <button
-                        className="
-                        px-4
-                        py-2
-                        rounded-xl
-                        bg-violet-600
-                        text-white
-                        text-sm
-                        font-medium
-                        hover:bg-violet-700
-                        transition-all
-                        cursor-pointer
-                        "
+                        onClick={() =>
+                          handleAssignClick(employee)
+                        }
+                        className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-violet-700"
                       >
                         Assign Task
                       </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="5"
-                    className="py-16 text-center"
-                  >
-                    <h3 className="font-semibold text-slate-700">
-                      No Employee Found
-                    </h3>
 
-                    <p className="mt-2 text-sm text-slate-500">
-                      Try a different search keyword.
-                    </p>
+                    </td>
+
+                  </tr>
+
+                ))
+
+              ) : (
+
+                <tr>
+
+                  <td
+                    colSpan={6}
+                    className="py-10 text-center text-slate-500"
+                  >
+                    No Employees Found
                   </td>
+
                 </tr>
+
               )}
+
             </tbody>
+
           </table>
+
         </div>
+
       </div>
+
+      {/* Assign Task Modal */}
+
+      <AssignTaskModal
+        isOpen={showAssignModal}
+        employee={selectedEmployee}
+        onClose={closeModal}
+        onSubmit={handleAssignTask}
+      />
+
     </div>
   );
 }

@@ -52,8 +52,6 @@ function EmployeeForm({ onClose }) {
       className="space-y-8"
     >
 
-      {/* Form Fields */}
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Employee ID */}
 

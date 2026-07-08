@@ -1,11 +1,12 @@
 import { useState } from "react";
-import "./TaskForm.css";
 
 function TaskForm({
   initialData = {},
   employees = [],
   onSubmit,
   isSubmitting = false,
+  employee = null,
+  hideEmployeeSelection = false,
 }) {
   const [formData, setFormData] = useState({
     title: initialData.title || "",
@@ -17,7 +18,6 @@ function TaskForm({
 
   const [errors, setErrors] = useState({});
 
-  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -27,18 +27,17 @@ function TaskForm({
     }));
   };
 
-  // Handle employee selection
   const handleEmployeeSelect = (employee) => {
     setFormData((prev) => {
       const updatedEmployees = {
         ...prev.assignedEmployees,
       };
 
-      if (updatedEmployees[employee.uid]) {
-        delete updatedEmployees[employee.uid];
+      if (updatedEmployees[employee.id]) {
+        delete updatedEmployees[employee.id];
       } else {
-        updatedEmployees[employee.uid] = {
-          name: employee.name,
+        updatedEmployees[employee.id] = {
+          name: employee.fullName,
           status: "Pending",
           assignedAt: Date.now(),
           updatedAt: null,
@@ -52,7 +51,6 @@ function TaskForm({
     });
   };
 
-  // Validation
   const validateForm = () => {
     const newErrors = {};
 
@@ -68,7 +66,10 @@ function TaskForm({
       newErrors.deadline = "Deadline is required";
     }
 
-    if (Object.keys(formData.assignedEmployees).length === 0) {
+    if (
+      !hideEmployeeSelection &&
+      Object.keys(formData.assignedEmployees).length === 0
+    ) {
       newErrors.assignedEmployees =
         "Please assign at least one employee";
     }
@@ -78,122 +79,194 @@ function TaskForm({
     return Object.keys(newErrors).length === 0;
   };
 
-  // Submit
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
-    onSubmit(formData);
+    const taskData = { ...formData };
+
+    if (hideEmployeeSelection && employee) {
+      taskData.assignedEmployees = {
+        [employee.id]: {
+          name: employee.fullName,
+          status: "Pending",
+          assignedAt: Date.now(),
+          updatedAt: null,
+        },
+      };
+    }
+
+    onSubmit(taskData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="task-form">
-      <h2>Create Task</h2>
-
-      {/* Task Title */}
-      <div className="form-group">
-    <label>Task Title</label>
-
-    <input
-        type="text"
-        name="title"
-        value={formData.title}
-        onChange={handleChange}
-    />
-
-    {errors.title && <p className="error">{errors.title}</p>}
-</div>
-
-      {/* Description */}
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 rounded-2xl bg-white"
+    >
       <div>
-        <label>Description</label>
-
-        <textarea
-          name="description"
-          rows="5"
-          placeholder="Enter task description"
-          value={formData.description}
-          onChange={handleChange}
-        />
-
-        {errors.description && (
-          <p className="error">{errors.description}</p>
-        )}
+        <h2 className="text-2xl font-bold text-slate-800">
+          Create Task
+        </h2>
+        <p className="text-sm text-slate-500">
+          Fill in the task details below.
+        </p>
       </div>
 
-      {/* Priority */}
-      <div className="row">
-         <div className="form-group">
-        <label>Priority</label>
-
-        <select
-          name="priority"
-          value={formData.priority}
-          onChange={handleChange}
-        >
-          <option value="Low">Low</option>
-
-          <option value="Medium">Medium</option>
-
-          <option value="High">High</option>
-        </select>
-        </div>
-     
-
-      {/* Deadline */}
-      <div className="form-group">
-        <label>Deadline</label>
+      {/* Title */}
+      <div>
+        <label className="mb-2 block text-sm font-medium text-slate-700">
+          Task Title
+        </label>
 
         <input
-          type="date"
-          name="deadline"
-          value={formData.deadline}
+          type="text"
+          name="title"
+          value={formData.title}
           onChange={handleChange}
+          placeholder="Enter task title"
+          className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-200"
         />
 
-        {errors.deadline && (
-          <p className="error">{errors.deadline}</p>
-        )}
-      </div>
-       </div>
-
-      {/* Employee Selection */}
-      <div className="form-group">
-        <label>Assign Employees</label>
-
-        {employees.length === 0 ? (
-          <p>No employees available</p>
-        ) : (
-          employees.map((employee) => (
-            <div className="employee-item" key={employee.uid}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={
-                    !!formData.assignedEmployees[employee.uid]
-                  }
-                  onChange={() =>
-                    handleEmployeeSelect(employee)
-                  }
-                />
-
-                {employee.name}
-              </label>
-            </div>
-          ))
-        )}
-
-        {errors.assignedEmployees && (
-          <p className="error">
-            {errors.assignedEmployees}
+        {errors.title && (
+          <p className="mt-1 text-sm text-red-500">
+            {errors.title}
           </p>
         )}
       </div>
 
-      <button type="submit" className="submit-btn" disabled={isSubmitting}>
-        {isSubmitting ? "Saving..." : "Save Task"}
-      </button>
+      {/* Description */}
+
+      <div>
+        <label className="mb-2 block text-sm font-medium text-slate-700">
+          Description
+        </label>
+
+        <textarea
+          rows={5}
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          placeholder="Describe the task..."
+          className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-200"
+        />
+
+        {errors.description && (
+          <p className="mt-1 text-sm text-red-500">
+            {errors.description}
+          </p>
+        )}
+      </div>
+
+      {/* Priority & Deadline */}
+
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-slate-700">
+            Priority
+          </label>
+
+          <select
+            name="priority"
+            value={formData.priority}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-200"
+          >
+            <option value="Low">Low</option>
+
+            <option value="Medium">Medium</option>
+
+            <option value="High">High</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-slate-700">
+            Deadline
+          </label>
+
+          <input
+            type="date"
+            name="deadline"
+            value={formData.deadline}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-200"
+          />
+
+          {errors.deadline && (
+            <p className="mt-1 text-sm text-red-500">
+              {errors.deadline}
+            </p>
+          )}
+        </div>
+
+      </div>
+
+      {/* Employee Selection */}
+
+      {!hideEmployeeSelection && (
+        <div>
+          <label className="mb-3 block text-sm font-medium text-slate-700">
+            Assign Employees
+          </label>
+
+          <div className="max-h-52 space-y-2 overflow-y-auto rounded-xl border border-slate-200 p-4">
+
+            {employees.length === 0 ? (
+              <p className="text-slate-500">
+                No employees available
+              </p>
+            ) : (
+              employees.map((employee) => (
+                <label
+                  key={employee.id}
+                  className="flex cursor-pointer items-center gap-3 rounded-lg p-2 hover:bg-slate-100"
+                >
+                  <input
+                    type="checkbox"
+                    checked={
+                      !!formData.assignedEmployees[employee.id]
+                    }
+                    onChange={() =>
+                      handleEmployeeSelect(employee)
+                    }
+                    className="h-4 w-4 accent-violet-600"
+                  />
+
+                  <span className="font-medium">
+                    {employee.fullName}
+                  </span>
+
+                  <span className="text-sm text-slate-500">
+                    ({employee.employeeId})
+                  </span>
+                </label>
+              ))
+            )}
+
+          </div>
+
+          {errors.assignedEmployees && (
+            <p className="mt-2 text-sm text-red-500">
+              {errors.assignedEmployees}
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Submit */}
+
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="rounded-xl bg-violet-600 px-6 py-3 font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+        >
+          {isSubmitting ? "Saving..." : "Save Task"}
+        </button>
+      </div>
     </form>
   );
 }

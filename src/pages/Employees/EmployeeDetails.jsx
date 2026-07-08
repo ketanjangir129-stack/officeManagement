@@ -63,15 +63,15 @@ function EmployeeDetails() {
                 <div className="text-center">
                     <div
                         className="
-                w-12
-                h-12
-                border-4
-                border-violet-200
-                border-t-violet-600
-                rounded-full
-                animate-spin
-                mx-auto
-                "
+                            w-12
+                            h-12
+                            border-4
+                            border-violet-200
+                            border-t-violet-600
+                            rounded-full
+                            animate-spin
+                            mx-auto
+                        "
                     />
 
                     <p className="mt-4 text-slate-600">
