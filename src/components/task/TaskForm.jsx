@@ -39,7 +39,7 @@ function TaskForm({
         updatedEmployees[employee.id] = {
           name: employee.fullName,
           status: "Pending",
-          assignedAt: Date.now(),
+          assignedAt: Date.now().toLocaleString("g-b"),
           updatedAt: null,
         };
       }
@@ -65,17 +65,7 @@ function TaskForm({
     if (!formData.deadline) {
       newErrors.deadline = "Deadline is required";
     }
-
-    if (
-      !hideEmployeeSelection &&
-      Object.keys(formData.assignedEmployees).length === 0
-    ) {
-      newErrors.assignedEmployees =
-        "Please assign at least one employee";
-    }
-
-    setErrors(newErrors);
-
+    
     return Object.keys(newErrors).length === 0;
   };
 
