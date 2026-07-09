@@ -15,21 +15,87 @@ function EmployeeDetails() {
 
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState(null);
+    const [errors, setErrors] = useState({});
     const [deleting, setDeleting] = useState(false);
 
     const employee = employees.find(
         (emp) => emp.id === id
     );
     const handleChange = (e) => {
+        const { name, value } = e.target;
+
         setEditData((prev) => ({
             ...prev,
-            [e.target.name]:
-                e.target.value,
+            [name]: value,
+        }));
+
+        setErrors((prev) => ({
+            ...prev,
+            [name]: "",
         }));
     };
+
+    // Validation function for employee data
+    const validateEmployee = () => {
+        const newErrors = {};
+
+        if (!editData.fullName?.trim()) {
+            newErrors.fullName = "Full Name is required";
+        }
+
+        if (!editData.employeeId?.trim()) {
+            newErrors.employeeId = "Employee ID is required";
+        }
+
+        if (!editData.email?.trim()) {
+            newErrors.email = "Email is required";
+        } else if (
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editData.email)
+        ) {
+            newErrors.email = "Enter a valid email";
+        }
+
+        if (!editData.phone?.trim()) {
+            newErrors.phone = "Phone Number is required";
+        } else if (
+            !/^[0-9]{10}$/.test(editData.phone)
+        ) {
+            newErrors.phone =
+            "Phone Number must be 10 digits";
+        }
+
+        if (!editData.city?.trim()) {
+            newErrors.city = "City is required";
+        }
+
+        if (!editData.state?.trim()) {
+            newErrors.state = "State is required";
+        }
+
+        if (!editData.designation?.trim()) {
+            newErrors.designation =
+            "Designation is required";
+        }
+
+        if (!editData.pincode?.trim()) {
+            newErrors.pincode = "Pincode is required";
+        } else if (
+            !/^[0-9]{6}$/.test(editData.pincode)
+        ) {
+            newErrors.pincode =
+            "Pincode must be 6 digits";
+        }
+        if (!editData.address?.trim()) {
+            newErrors.address = "Address is required";
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleUpdate = async () => {
+        if (!validateEmployee()) return;
         try {
-            await updateEmployee(employee.id, editData);
+            await updateEmployee(employee.id,editData );
             toast.success("Employee Updated Successfully");
             setIsEditing(false);
         } catch (error) {
@@ -43,7 +109,7 @@ function EmployeeDetails() {
         try {
             setDeleting(true);
             await deleteEmployee(employee.id);
-            toast.success("Employee Deleted");
+            toast.success("Employee removed successfully");
             navigate("/employees", { replace: true, });
         } catch (error) {
             console.error(error);
@@ -296,6 +362,7 @@ function EmployeeDetails() {
                             value={editData?.email}
                             isEditing={isEditing}
                             onChange={handleChange}
+                            error={errors.email}
                         />
 
                         <EditableInfoCard
@@ -304,6 +371,7 @@ function EmployeeDetails() {
                             value={editData?.phone}
                             isEditing={isEditing}
                             onChange={handleChange}
+                            error={errors.phone}
                         />
 
                         <EditableInfoCard
@@ -312,14 +380,14 @@ function EmployeeDetails() {
                             value={editData?.dob}
                             isEditing={isEditing}
                             onChange={handleChange}
+                            error={errors.dob}
                         />
 
                         <EditableInfoCard
                             title="Joining Date"
                             name="joiningDate"
                             value={editData?.joiningDate}
-                            isEditing={isEditing}
-                            onChange={handleChange}
+                            error={errors.joiningDate}
                         />
                     </div>
 
@@ -352,13 +420,13 @@ function EmployeeDetails() {
                                 value={editData?.fullName}
                                 isEditing={isEditing}
                                 onChange={handleChange}
+                                error={errors.fullName}
                             />
                             <EditableInfoCard
                                 title="ID"
                                 name="employeeId"
                                 value={editData?.employeeId}
-                                isEditing={isEditing}
-                                onChange={handleChange}
+                                error={errors.employeeId}
                             />
                             <EditableInfoCard
                                 title="City"
@@ -366,30 +434,31 @@ function EmployeeDetails() {
                                 value={editData?.city}
                                 isEditing={isEditing}
                                 onChange={handleChange}
+                                error={errors.city}
                             />
-
                             <EditableInfoCard
                                 title="State"
                                 name="state"
                                 value={editData?.state}
                                 isEditing={isEditing}
                                 onChange={handleChange}
+                                error={errors.state}
                             />
-
                             <EditableInfoCard
                                 title="Pincode"
                                 name="pincode"
                                 value={editData?.pincode}
                                 isEditing={isEditing}
                                 onChange={handleChange}
+                                error={errors.pincode}
                             />
-
                             <EditableInfoCard
                                 title="Designation"
                                 name="designation"
                                 value={editData?.designation}
                                 isEditing={isEditing}
                                 onChange={handleChange}
+                                error={errors.designation}
                             />
                         </div>
 
@@ -421,6 +490,12 @@ function EmployeeDetails() {
                             </div>
                         )}
 
+                        {errors.address && (
+                            <p className="mt-2 text-sm text-red-500">
+                                {errors.address}
+                            </p>
+                        )}
+
                     </div>
 
                 </div>
@@ -431,38 +506,45 @@ function EmployeeDetails() {
 }
 
 function EditableInfoCard({
-    title,
-    name,
-    value,
-    isEditing,
-    onChange,
+  title,
+  name,
+  value,
+  isEditing,
+  onChange,
+  error,
 }) {
-    return (
-        <div
-            className="bg-slate-50 border border-slate-200 rounded-2xl p-5"
-        >
-            <p
-                className="text-sm text-slate-500 mb-2"
-            >
-                {title}
-            </p>
+  return (
+    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+      <p className="text-sm text-slate-500 mb-2">
+        {title}
+      </p>
 
-            {isEditing ? (
-                <input
-                    name={name}
-                    value={value || ""}
-                    onChange={onChange}
-                    className="w-full border rounded-lg px-3 py-2 outline-none"
-                />
-            ) : (
-                <h3
-                    className="font-semibold text-slate-800"
-                >
-                    {value || "-"}
-                </h3>
-            )}
-        </div>
-    );
+      {isEditing ? (
+        <>
+          <input
+            name={name}
+            value={value || ""}
+            onChange={onChange}
+            className={`w-full rounded-lg px-3 py-2 outline-none border ${
+              error
+                ? "border-red-500"
+                : "border-slate-300"
+            }`}
+          />
+
+          {error && (
+            <p className="mt-1 text-xs text-red-500">
+              {error}
+            </p>
+          )}
+        </>
+      ) : (
+        <h3 className="font-semibold text-slate-800">
+          {value || "-"}
+        </h3>
+      )}
+    </div>
+  );
 }
 
 export default EmployeeDetails;

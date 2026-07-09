@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 function Employees() {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState("");
-  const { employees } = useEmployees();
+  const { employees, loading } = useEmployees();
   const navigate = useNavigate();
 
   const filteredEmployees = searchFilter(
@@ -16,6 +16,31 @@ function Employees() {
     search, 
     ["fullName", "employeeId"]
   );
+
+  //loader
+  if (loading) {
+    return (
+        <div className="flex items-center justify-center h-[70vh]">
+            <div className="text-center">
+                <div
+                    className="
+                        w-12
+                        h-12
+                        border-4
+                        border-violet-200
+                        border-t-violet-600
+                        rounded-full
+                        animate-spin
+                        mx-auto
+                    "
+                />
+                <p className="mt-4 text-slate-600">
+                    Loading employees...
+                </p>
+            </div>
+        </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -98,6 +123,10 @@ function Employees() {
                 <th className="py-4 px-6 text-left text-sm font-semibold text-slate-600 uppercase tracking-wide">
                   Designation
                 </th>
+
+                <th className="py-4 px-6 text-left text-sm font-semibold text-slate-600 uppercase tracking-wide">
+                  Action
+                </th>
               </tr>
             </thead>
 
@@ -114,7 +143,6 @@ function Employees() {
                     duration-200
                     cursor-pointer
                     "
-                    onClick={() => navigate(`/employees/${employee.id}`)}
                   >
                     <td className="py-4 px-6 text-sm font-semibold text-slate-700">
                       {employee.employeeId}
@@ -143,16 +171,24 @@ function Employees() {
                     <td className="py-4 px-6 text-sm font-medium text-slate-600">
                       {employee.designation}
                     </td>
+                    <td className="py-4 px-6 text-sm font-medium text-slate-600">
+                      <button 
+                        onClick={() => navigate(`/employees/${employee.id}`)}
+                        className="bg-violet-600 text-white px-5 py-2 rounded-xl font-medium shadow-sm hover:bg-violet-700 hover:shadow-md transition-all cursor-pointer"
+                      >
+                        Full Details
+                      </button>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td
-                    colSpan={5}
+                    colSpan={6}
                     className="py-16 text-center"
                   >
                     <h3 className="font-semibold text-slate-700">
-                      No Employees Found / Employee List is Loading...
+                      No Employees Found
                     </h3>
 
                     <p className="mt-2 text-sm text-slate-500">

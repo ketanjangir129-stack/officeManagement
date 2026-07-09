@@ -21,7 +21,7 @@ function EmployeeForm({ onClose }) {
     assignedTasks: {},
   });
 
-  const [errors, setErrors] = useState({});  
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -106,7 +106,7 @@ function EmployeeForm({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+    // console.log("Form Data:", formData);
     if (!validateForm()) return;
     try {
       await addEmployee(formData);

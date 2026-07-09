@@ -5,25 +5,10 @@ function AddEmployeeModal({ open, onClose }) {
 
   return (
     <div
-      className="
-      fixed inset-0 z-50
-      flex items-center justify-center
-      bg-black/40 backdrop-blur-sm
-      p-4
-      "
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
     >
       <div
-        className="
-        bg-white
-        w-full
-        max-w-6xl
-        max-h-[90vh]
-        overflow-y-auto
-        rounded-3xl
-        p-6
-        shadow-xl
-        hide-scrollbar
-        "
+        className="bg-white w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 shadow-xl hide-scrollbar"
       >
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">

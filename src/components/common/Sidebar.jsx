@@ -6,7 +6,7 @@ import { SiGoogletasks } from "react-icons/si";
 function Sidebar() {
   return (
     <aside
-      className="hidden md:block w-64 bg-slate-900 text-white shrink-0"
+      className="hidden md:block w-64 bg-slate-800 text-white shrink-0"
     >
       <div className="p-5 border-b border-slate-700">
         <h2 className="font-semibold text-xl">
@@ -16,7 +16,7 @@ function Sidebar() {
 
       <nav className="p-4 space-y-2">
 
-        <NavLink
+        {/* <NavLink
           to="/"
           className={({ isActive }) =>
             `flex items-center gap-2 p-3 rounded-lg transition-colors ${
@@ -28,7 +28,7 @@ function Sidebar() {
         >
           <MdDashboard size={20} />
           Dashboard
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
           to="/employees"
