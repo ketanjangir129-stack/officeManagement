@@ -4,246 +4,248 @@ import { searchFilter } from "../../utils/searchFilter";
 import SearchFilter from "../../components/common/SearchFilter";
 import AssignTaskModal from "../../components/task/AssignTaskModal";
 import { createTask } from "../../services/taskService";
-import { assignTaskToEmployee } from "../../services/employeeService";
+import { assignTask } from "../../services/assignTaskService";
 import { toast } from "react-toastify";
 
 function TaskDashboard() {
-  const { employees, loading } = useEmployees();
+const { employees, loading } = useEmployees();
 
-  const [search, setSearch] = useState("");
+const [search, setSearch] = useState("");
 
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
+const [selectedEmployee, setSelectedEmployee] = useState(null);
 
-  const [showAssignModal, setShowAssignModal] = useState(false);
+const [showAssignModal, setShowAssignModal] = useState(false);
 
-  const filteredEmployees = searchFilter(
-    employees,
-    search,
-    ["fullName", "employeeId"]
-  );
+const filteredEmployees = searchFilter(
+  employees,
+  search,
+  ["fullName", "employeeId"]
+);
 
-  // Open Modal
-  const handleAssignClick = (employee) => {
-    setSelectedEmployee(employee);
-    setShowAssignModal(true);
-  };
+// Open Modal
+const handleAssignClick = (employee) => {
+  setSelectedEmployee(employee);
+  setShowAssignModal(true);
+};
 
-  // Close Modal
-  const closeModal = () => {
-    setSelectedEmployee(null);
-    setShowAssignModal(false);
-  };
+// Close Modal
+const closeModal = () => {
+  setSelectedEmployee(null);
+  setShowAssignModal(false);
+};
 
-  // Save Task
-  const handleAssignTask = async (taskData) => {
-    try {
-      const result = await createTask({
-        ...taskData,
+// Save Task
+const handleAssignTask = async (taskData) => {
+  try {
+    const result = await createTask({
+      ...taskData,
 
-        assignedEmployees: {
-          [selectedEmployee.id]: {
-            name: selectedEmployee.fullName,
-            status: "Pending",
-          },
+      assignedEmployees: {
+        [selectedEmployee.id]: {
+          name: selectedEmployee.fullName,
+          status: "Pending",
         },
-      });
+      },
+    });
 
-      if (result.success) {
-        await assignTaskToEmployee(
-          selectedEmployee.id,
-          result.id
-        );
+    if (result.success) {
+      await assignTask(
+  selectedEmployee.id,
+  result.taskId,
+  taskData
+);
+      
 
-        toast.success("Task Assigned Successfully");
+      toast.success("Task Assigned Successfully");
 
-        closeModal();
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong");
+      closeModal();
     }
-  };
-
-  //loader
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-[70vh]">
-          <div className="text-center">
-              <div
-                  className="
-                      w-12
-                      h-12
-                      border-4
-                      border-violet-200
-                      border-t-violet-600
-                      rounded-full
-                      animate-spin
-                      mx-auto
-                  "
-              />
-              <p className="mt-4 text-slate-600">
-                  Loading employees...
-              </p>
-          </div>
-      </div>
-    )
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong");
   }
+};
 
+//loader
+if (loading) {
   return (
-    <div className="space-y-6">
+    <div className="flex items-center justify-center h-[70vh]">
+        <div className="text-center">
+            <div
+                className="
+                    w-12
+                    h-12
+                    border-4
+                    border-violet-200
+                    border-t-violet-600
+                    rounded-full
+                    animate-spin
+                    mx-auto
+                "
+            />
+            <p className="mt-4 text-slate-600">
+                Loading employees...
+            </p>
+        </div>
+    </div>
+  )
+}
 
-      {/* Header */}
+return (
+  <div className="space-y-6">
 
-      <div>
-        <h1 className="text-3xl font-bold text-slate-800">
-          Employee Task Management
-        </h1>
+    {/* Header */}
 
-        <p className="mt-1 text-slate-500">
-          Assign and manage employee tasks
-        </p>
-      </div>
+    <div>
+      <h1 className="text-3xl font-bold text-slate-800">
+        Employee Task Management
+      </h1>
 
-      {/* Search */}
+      <p className="mt-1 text-slate-500">
+        Assign and manage employee tasks
+      </p>
+    </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <SearchFilter
-          value={search}
-          onChange={setSearch}
-          placeholder="Search employee..."
-        />
-      </div>
+    {/* Search */}
 
-      {/* Table */}
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <SearchFilter
+        value={search}
+        onChange={setSearch}
+        placeholder="Search employee..."
+      />
+    </div>
 
-      <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+    {/* Table */}
 
-        <div className="overflow-x-auto">
+    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
 
-          <table className="w-full">
+      <div className="overflow-x-auto">
 
-            <thead>
+        <table className="w-full">
 
-              <tr className="border-b border-slate-200 bg-slate-50">
+          <thead>
 
-                <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
-                  ID
-                </th>
+            <tr className="border-b border-slate-200 bg-slate-50">
 
-                <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
-                  Employee
-                </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+                ID
+              </th>
 
-                <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
-                  Designation
-                </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+                Employee
+              </th>
 
-                <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
-                  Email
-                </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+                Designation
+              </th>
 
-                <th className="px-6 py-4 text-center text-sm font-semibold uppercase text-slate-600">
-                  Tasks
-                </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+                Email
+              </th>
 
-                <th className="px-6 py-4 text-center text-sm font-semibold uppercase text-slate-600">
-                  Action
-                </th>
+              <th className="px-6 py-4 text-center text-sm font-semibold uppercase text-slate-600">
+                Tasks
+              </th>
 
-              </tr>
+              <th className="px-6 py-4 text-center text-sm font-semibold uppercase text-slate-600">
+                Action
+              </th>
 
-            </thead>
+            </tr>
 
-            <tbody>
+          </thead>
 
-              {filteredEmployees.length > 0 ? (
+          <tbody>
 
-                filteredEmployees.map((employee) => (
+            {filteredEmployees.length > 0 ? (
 
-                  <tr
-                    key={employee.id}
-                    className="border-b border-slate-100 transition hover:bg-violet-50"
-                  >
+              filteredEmployees.map((employee) => (
 
-                    <td className="px-6 py-4 font-medium text-slate-700">
-                      {employee.employeeId}
-                    </td>
+                <tr
+                  key={employee.id}
+                  className="border-b border-slate-100 transition hover:bg-violet-50"
+                >
 
-                    <td className="px-6 py-4 font-medium text-slate-800">
-                      {employee.fullName}
-                    </td>
+                  <td className="px-6 py-4 font-medium text-slate-700">
+                    {employee.employeeId}
+                  </td>
 
-                    <td className="px-6 py-4 text-slate-600">
-                      {employee.designation}
-                    </td>
+                  <td className="px-6 py-4 font-medium text-slate-800">
+                    {employee.fullName}
+                  </td>
 
-                    <td className="px-6 py-4 text-slate-600">
-                      {employee.email}
-                    </td>
+                  <td className="px-6 py-4 text-slate-600">
+                    {employee.designation}
+                  </td>
 
-                    <td className="px-6 py-4 text-center">
+                  <td className="px-6 py-4 text-slate-600">
+                    {employee.email}
+                  </td>
 
-                      <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
+                  <td className="px-6 py-4 text-center">
 
-                        {employee.assignedTasks
-                          ? Object.keys(employee.assignedTasks).length
-                          : 0}
+                    <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
 
-                      </span>
+                      {employee.assignedTasks
+                        ? Object.keys(employee.assignedTasks).length
+                        : 0}
 
-                    </td>
+                    </span>
 
-                    <td className="px-6 py-4 text-center">
+                  </td>
 
-                      <button
-                        onClick={() =>
-                          handleAssignClick(employee)
-                        }
-                        className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-violet-700"
-                      >
-                        Assign Task
-                      </button>
+                  <td className="px-6 py-4 text-center">
 
-                    </td>
+                    <button
+                      onClick={() =>
+                        handleAssignClick(employee)
+                      }
+                      className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-violet-700"
+                    >
+                      Assign Task
+                    </button>
 
-                  </tr>
-
-                ))
-
-              ) : (
-
-                <tr>
-
-                  <td
-                    colSpan={6}
-                    className="py-10 text-center text-slate-500"
-                  >
-                    No Employees Found
                   </td>
 
                 </tr>
 
-              )}
+              ))
 
-            </tbody>
+            ) : (
 
-          </table>
+              <tr>
 
-        </div>
+                <td
+                  colSpan={6}
+                  className="py-10 text-center text-slate-500"
+                >
+                  No Employees Found
+                </td>
+
+              </tr>
+
+            )}
+
+          </tbody>
+
+        </table>
 
       </div>
 
-      {/* Assign Task Modal */}
-
-      <AssignTaskModal
-        isOpen={showAssignModal}
-        employee={selectedEmployee}
-        onClose={closeModal}
-        onSubmit={handleAssignTask}
-      />
-
     </div>
-  );
+
+    {/* Assign Task Modal */}
+
+    <AssignTaskModal
+      isOpen={showAssignModal}
+      employee={selectedEmployee}
+      onClose={closeModal}
+      onSubmit={handleAssignTask}
+    />
+
+  </div>
+);
 }
 
 export default TaskDashboard;

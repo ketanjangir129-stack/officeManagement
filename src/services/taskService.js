@@ -11,28 +11,34 @@ import {
 
 const tasksRef= ref(db,"tasks");
 
-export const createTask = async (taskdata) =>{
-    try {
-        const newTaskRef = push(tasksRef);
-        
-        await set(newTaskRef,{
-            ...taskdata,
-            createdAt: Date.now(),
-            updatedAt: Date.now(),
+export const createTask = async (taskData) => {
+  try {
+    // Generate a unique Firebase key
+    const newTaskRef = push(ref(db, "tasks"));
 
-        });
-        return {
-            success: true,
-            id: newTaskRef.key,
-        };
-    } catch (error){
-        console.error("Create Task Error:", error);
-        return {
-            success: false,
-            error: error.message,
-        };
-    }
+    // Save task data
+    await set(newTaskRef, {
+      ...taskData,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+
+    return {
+      success: true,
+      taskId: newTaskRef.key,
+    };
+  } catch (error) {
+
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+  
 };
+
+
+
 export const getAllTasks = async () => {
   try {
     const snapshot = await get(tasksRef);
