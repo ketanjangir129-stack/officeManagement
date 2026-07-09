@@ -7,15 +7,13 @@ function EmployeeLogin() {
 
     const [employeeId, setEmployeeId] = useState("");
     const navigate = useNavigate();
-    const { employees } = useEmployees();
+    const { employees,updateOnlineStatus } = useEmployees();
 
-    const handleLogin = () => {
-
+    const handleLogin = async () => {
         if (!employeeId.trim()) {
             toast.error("Employee ID is required");
             return;
         }
-
         const employee = employees.find(
             (emp) =>
                 emp.employeeId.toLowerCase() ===
@@ -25,12 +23,16 @@ function EmployeeLogin() {
             toast.error("Employee not found");
             return;
         }
-        localStorage.setItem(
-            "employeeId",
-            employee.id
-        );
-        toast.success("Login Successful");
-        navigate("/employee/dashboard");
+        try {
+
+            await updateOnlineStatus(employee.id,true);
+            localStorage.setItem("employeeId",employee.id);
+            toast.success("Login Successful");
+            navigate("/employee/tasks");
+        } catch (error) {
+            console.error(error);
+            toast.error("Login Failed");
+        }
     };
 
     return (
@@ -58,7 +60,7 @@ function EmployeeLogin() {
 
                 <button
                     onClick={handleLogin}
-                    className="w-full mt-5 bg-violet-600 text-white py-3 rounded-xl hover:bg-violet-700"
+                    className="w-full mt-5 bg-violet-600 text-white py-3 rounded-xl hover:bg-violet-700 cursor-pointer"
                 >
                     Login
                 </button>

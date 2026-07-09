@@ -10,12 +10,22 @@ function Employees() {
   const [search, setSearch] = useState("");
   const { employees, loading } = useEmployees();
   const navigate = useNavigate();
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const filteredEmployees = searchFilter(
-    employees, 
-    search, 
-    ["fullName", "employeeId"]
-  );
+      employees,
+      search,
+      ["fullName", "employeeId"]
+    ).filter((employee) => {
+      if (statusFilter === "all") return true;
+      if (statusFilter === "active") {
+        return employee.isOnline === true;
+      }
+      if (statusFilter === "inactive") {
+        return employee.isOnline === false;
+      }
+      return true;
+  });
 
   //loader
   if (loading) {
@@ -78,8 +88,25 @@ function Employees() {
       </div>
 
       {/* Search Bar */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
-        <SearchFilter value={search} onChange={setSearch} placeholder="Search employee...." />
+     <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1">
+            <SearchFilter
+              value={search}
+              onChange={setSearch}
+              placeholder="Search employee..."
+            />
+          </div>
+          <select
+            value={statusFilter}
+            onChange={(e) =>setStatusFilter(e.target.value)}
+            className="px-4 py-3 border border-slate-300 rounded-xl outline-none focus:border-violet-500"
+          >
+            <option value="all">All Employees</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
       </div>
 
       {/* Employee Table */}
@@ -122,6 +149,10 @@ function Employees() {
 
                 <th className="py-4 px-6 text-left text-sm font-semibold text-slate-600 uppercase tracking-wide">
                   Designation
+                </th>
+
+                <th className="py-4 px-6 text-left text-sm font-semibold text-slate-600 uppercase tracking-wide">
+                  Status
                 </th>
 
                 <th className="py-4 px-6 text-left text-sm font-semibold text-slate-600 uppercase tracking-wide">
@@ -171,6 +202,17 @@ function Employees() {
                     <td className="py-4 px-6 text-sm font-medium text-slate-600">
                       {employee.designation}
                     </td>
+                    <td className="py-4 px-6">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          employee.isOnline
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {employee.isOnline ? "Active": "inActive"}
+                      </span>
+                    </td>
                     <td className="py-4 px-6 text-sm font-medium text-slate-600">
                       <button 
                         onClick={() => navigate(`/employees/${employee.id}`)}
@@ -184,7 +226,7 @@ function Employees() {
               ) : (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className="py-16 text-center"
                   >
                     <h3 className="font-semibold text-slate-700">

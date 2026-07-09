@@ -5,8 +5,9 @@ import Employees from "../pages/Employees/Employees";
 import TaskDashboard from "../pages/task/TaskDashboard";
 import EmployeeDetails from "../pages/Employees/EmployeeDetails";
 import EmployeeLogin from "../pages/EmployeePortal/EmployeeLogin";
-import EmployeeDashboard from "../pages/EmployeePortal/EmployeeDashboard";
 import EmployeeProtectedRoute from "./EmployeeProtectedRoute";
+import EmployeeLayout from "../layouts/EmployeeLayout";
+import EmployeeTasks from "../pages/EmployeePortal/EmployeeTasks";
 
 
 const AppRoutes = () => {
@@ -22,13 +23,21 @@ const AppRoutes = () => {
         <Route path="/tasks" element={<TaskDashboard />}/>
       </Route>
 
-      {/* Employee Routes */}
-      <Route path="/employee-login" element={<EmployeeLogin />} />
-      <Route path="/employee/dashboard" element={
-        <EmployeeProtectedRoute>
-          <EmployeeDashboard />
-        </EmployeeProtectedRoute>
-      } />
+
+      {/* Employee Login */}
+      <Route path="/employees-login" element={<EmployeeLogin />} />
+
+      {/* Employee Portal */}
+
+      <Route
+        element={
+          <EmployeeProtectedRoute>
+            <EmployeeLayout />
+          </EmployeeProtectedRoute>
+        }
+      >
+        <Route path="/employee/tasks" element={<EmployeeTasks />}/>
+      </Route>
 
     </Routes>
   );

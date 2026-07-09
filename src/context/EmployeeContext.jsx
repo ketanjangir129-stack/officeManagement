@@ -79,6 +79,24 @@ export const EmployeeProvider = ({ children }) => {
     }
   };
 
+  // status active or inactive
+  const updateOnlineStatus = async (
+    employeeId,
+    isOnline
+  ) => {
+    try {
+      await update(
+        ref(db, `employees/${employeeId}`),
+        {
+          isOnline,
+        }
+      );
+       console.log("Status Updated:",isOnline);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchEmployees();
   }, []);
@@ -91,6 +109,7 @@ export const EmployeeProvider = ({ children }) => {
         addEmployee,
         updateEmployee,
         deleteEmployee,
+        updateOnlineStatus
       }}
     >
       {children}
