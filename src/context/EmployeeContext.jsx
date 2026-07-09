@@ -39,7 +39,7 @@ export const EmployeeProvider = ({ children }) => {
 
     const employeeRef = push(ref(db, "employees"));
 
-    console.log("Generated Key:", employeeRef.key);
+    // console.log("Generated Key:", employeeRef.key);
 
     await set(employeeRef, {
       ...employeeData,

@@ -12,7 +12,7 @@ createRoot(document.getElementById('root')).render(
     <EmployeeProvider>
       <BrowserRouter>
         <App />
-        <ToastContainer position="top-right" />
+        <ToastContainer position="bottom-right" />
       </BrowserRouter>
     </EmployeeProvider>
   </StrictMode>,
