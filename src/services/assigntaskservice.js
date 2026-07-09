@@ -1,10 +1,17 @@
-import { ref, update } from "firebase/database";
+import { ref, update, onValue } from "firebase/database";
 import { db } from "../firebase/firebase";
+
+export const subscribeAssignedTasks = (callback) => {
+  const assignRef = ref(db, "assignTask");
+
+  return onValue(assignRef, (snapshot) => {
+    callback(snapshot.exists() ? snapshot.val() : {});
+  });
+};
 
 export const assignTask = async (
   employeeId,
-  taskId,
-  taskData
+  taskId
 ) => {
   try {
     await update(ref(db, `assignTask/${employeeId}`), {
