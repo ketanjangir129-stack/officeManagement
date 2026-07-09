@@ -1,17 +1,19 @@
-// routes/AppRoutes.jsx
-
 import { Routes, Route, Navigate } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Employees from "../pages/Employees/Employees";
 import TaskDashboard from "../pages/task/TaskDashboard";
 import EmployeeDetails from "../pages/Employees/EmployeeDetails";
+import EmployeeLogin from "../pages/EmployeePortal/EmployeeLogin";
+import EmployeeDashboard from "../pages/EmployeePortal/EmployeeDashboard";
+import EmployeeProtectedRoute from "./EmployeeProtectedRoute";
 
 
 const AppRoutes = () => {
   return (
     <Routes>
 
+      {/* Admin Routes */}
       <Route element={<DashboardLayout />}>
         {/* <Route path="/" element={<Dashboard />}/> */}
         <Route path="/" element={<Navigate to="/employees" replace />} />
@@ -19,6 +21,14 @@ const AppRoutes = () => {
         <Route path="/employees/:id" element={<EmployeeDetails />}/>
         <Route path="/tasks" element={<TaskDashboard />}/>
       </Route>
+
+      {/* Employee Routes */}
+      <Route path="/employee-login" element={<EmployeeLogin />} />
+      <Route path="/employee/dashboard" element={
+        <EmployeeProtectedRoute>
+          <EmployeeDashboard />
+        </EmployeeProtectedRoute>
+      } />
 
     </Routes>
   );
