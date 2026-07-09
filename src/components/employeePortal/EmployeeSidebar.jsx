@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useEmployees } from "../../context/EmployeeContext";
 import { useNavigate } from "react-router-dom";
 
@@ -5,10 +6,23 @@ function EmployeeSidebar() {
 
     const navigate = useNavigate();
     const employeeId =localStorage.getItem("employeeId");
-    const { employees,updateOnlineStatus } = useEmployees();
+    const { employees,updateOnlineStatus,loading } = useEmployees();
     const employee = employees.find(
         (emp) => emp.id === employeeId
     );
+    
+    if (loading) {
+    return (
+        <aside className="w-80 flex items-center justify-center bg-slate-800 text-white">
+            Loading...
+        </aside>
+    );
+    useEffect(() => {
+    if (!loading && !employee) {
+        navigate("/employees-login");
+    }
+}, [employee, loading]);
+}
 
     const handleLogout = async () => {
         console.log("Logout clicked");
@@ -31,7 +45,7 @@ function EmployeeSidebar() {
                 <div className="flex flex-col items-center">
 
                     <div className="w-24 h-24 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center text-4xl font-bold">
-                        {employee?.fullName?.charAt(0)}
+                        {employee?.fullName?.trim()?.charAt(0)?.toUpperCase()}
                     </div>
 
                     <h2 className="mt-4 text-xl font-bold">
