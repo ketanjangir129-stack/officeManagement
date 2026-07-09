@@ -4,6 +4,7 @@ import { useEmployees } from "../../context/EmployeeContext";
 import SearchFilter from "../../components/common/SearchFilter";
 import {searchFilter} from "../../utils/searchFilter";
 import { useNavigate } from "react-router-dom";
+import EmployeeStats from "../../components/employee/EmployeeStats";
 
 function Employees() {
   const [openModal, setOpenModal] = useState(false);
@@ -87,6 +88,8 @@ function Employees() {
         </button>
       </div>
 
+      <EmployeeStats employees={employees} /> 
+
       {/* Search Bar */}
      <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
         <div className="flex flex-col md:flex-row gap-4">
@@ -100,9 +103,9 @@ function Employees() {
           <select
             value={statusFilter}
             onChange={(e) =>setStatusFilter(e.target.value)}
-            className="px-4 py-3 border border-slate-300 rounded-xl outline-none focus:border-violet-500"
+            className="px-4 py-3 cursor-pointer border border-slate-300 rounded-xl outline-none focus:border-violet-500"
           >
-            <option value="all">All Employees</option>
+            <option value="all" >All Employees</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
