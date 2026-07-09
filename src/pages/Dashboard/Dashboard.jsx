@@ -5,6 +5,7 @@ import {
   MdPendingActions,
 } from "react-icons/md";
 import EmployeePerformanceChart from "../Dashboard/EmployeePerformanceChart";
+import { useEmployees } from "../../context/EmployeeContext";
 
 const stats = [
   {
@@ -57,6 +58,8 @@ const recentActivities = [
 ];
 
 function Dashboard() {
+  const {employees} = useEmployees();
+
   return (
     <div className="space-y-6">
       {/* Page Heading */}

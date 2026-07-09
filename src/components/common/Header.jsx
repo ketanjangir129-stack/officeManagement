@@ -5,7 +5,7 @@ function Header() {
         {/* Search */}
         <div className="relative w-full sm:max-w-md">
           <p className="text-lg font-semibold text-gray-900">
-            Welcome, to the Employee Management System
+            Welcome, to the oManagement
           </p>
         </div>
         {/* Profile */}
