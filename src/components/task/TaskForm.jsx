@@ -124,13 +124,11 @@ taskData.assignedEmployees = {
 };
 
 }
-console.log(onSubmit);
-console.log(typeof onSubmit);
 
-console.log("Task Data:", taskData);
-console.log("Calling onSubmit...");
+
+
 await onSubmit(taskData);
-console.log("onSubmit finished");
+
 };
 
 return (
