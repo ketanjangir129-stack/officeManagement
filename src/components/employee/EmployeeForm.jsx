@@ -18,6 +18,7 @@ function EmployeeForm({ onClose }) {
     state: "",
     pincode: "",
     status: "Active",
+    isOnline: false,
     assignedTasks: {},
   });
 
