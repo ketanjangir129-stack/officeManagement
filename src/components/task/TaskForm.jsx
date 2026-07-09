@@ -89,11 +89,11 @@ if (selectedDate < today) {
 }
 
 if (
-!hideEmployeeSelection &&
-Object.keys(formData.assignedEmployees).length === 0
+  !hideEmployeeSelection &&
+  Object.keys(formData.assignedEmployees).length === 0
 ) {
-newErrors.assignedEmployees =
-  "Please select at least one employee";
+  newErrors.assignedEmployees =
+    "Please select at least one employee";
 }
 
 setErrors(newErrors);
@@ -111,21 +111,6 @@ e.preventDefault();
 if (!validateForm()) return;
 
 const taskData = { ...formData };
-
-// If opened from Assign Task Modal
-if (hideEmployeeSelection && employee) {
-taskData.assignedEmployees = {
-  [employee.id]: {
-    name: employee.fullName,
-    status: "Pending",
-    assignedAt: Date.now(),
-    updatedAt: null,
-  },
-};
-
-}
-
-
 
 await onSubmit(taskData);
 

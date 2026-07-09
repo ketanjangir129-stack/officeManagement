@@ -44,34 +44,32 @@ setShowAssignModal(false);
 
 // Save Task
 const handleAssignTask = async (taskData) => {
-try {
-  const result = await createTask({
-    ...taskData,
+  try {
+    // Remove assignedEmployees before saving the task
+    const { assignedEmployees, ...taskOnlyData } = taskData;
 
-    assignedEmployees: {
-      [selectedEmployee.id]: {
-        name: selectedEmployee.fullName,
-        status: "Pending",
-      },
-    },
-  });
+    // Create the task
+    const result = await createTask(taskOnlyData);
 
-  if (result.success) {
+    if (!result.success) {
+      toast.error("Failed to create task");
+      return;
+    }
+
+    // Create the assignment
     await assignTask(
-selectedEmployee.id,
-result.taskId,
-taskData
-);
-    
+      selectedEmployee.id,
+      result.taskId
+    );
 
     toast.success("Task Assigned Successfully");
 
     closeModal();
+
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong");
   }
-} catch (error) {
-  console.error(error);
-  alert("Something went wrong");
-}
 };
 
 //loader
