@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useEmployees } from "../../context/EmployeeContext";
-import EmployeeStats from "../../components/employeePortal/EmployeeStats";
-import EmployeeTaskTable from "../../components/employeePortal/EmployeeTaskTable";
+import EmployeeStats from "../../components/employeeInterface/EmployeeStats";
+import EmployeeTaskTable from "../../components/employeeInterface/EmployeeTaskTable";
 import SearchFilter from "../../components/common/SearchFilter";
 
 function EmployeeTasks() {

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import EmployeeSidebar from "../components/employeePortal/EmployeeSidebar";
-import EmployeeHeader from "../components/employeePortal/EmployeeHeader";
+import EmployeeSidebar from "../components/employeeInterface/EmployeeSidebar";
+import EmployeeHeader from "../components/employeeInterface/EmployeeHeader";
 
 function EmployeeLayout() {
     return (
@@ -10,8 +10,7 @@ function EmployeeLayout() {
 
              {/* Main Content */}
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-                <EmployeeHeader />
-                <main className="flex-1 overflow-y-auto p-4 sm:p-5 md:p-6">
+                <main className="flex-1 overflow-y-auto p-4 sm:p-5 md:p-6 hide-scrollbar">
                     <Outlet />
                 </main>
             </div>

@@ -1,13 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Dashboard from "../pages/Dashboard/Dashboard";
-import Employees from "../pages/Employees/Employees";
+import Employees from "../pages/EmployeesManagement/Employees";
 import TaskDashboard from "../pages/task/TaskDashboard";
-import EmployeeDetails from "../pages/Employees/EmployeeDetails";
-import EmployeeLogin from "../pages/EmployeePortal/EmployeeLogin";
+import EmployeeDetails from "../pages/EmployeesManagement/EmployeeDetails";
+import EmployeeLogin from "../pages/EmployeeInterface/EmployeeLogin";
 import EmployeeProtectedRoute from "./EmployeeProtectedRoute";
 import EmployeeLayout from "../layouts/EmployeeLayout";
-import EmployeeTasks from "../pages/EmployeePortal/EmployeeTasks";
+import EmployeeTasks from "../pages/EmployeeInterface/EmployeeTasks";
 
 
 const AppRoutes = () => {
