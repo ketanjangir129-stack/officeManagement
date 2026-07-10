@@ -2,7 +2,7 @@ import { useState , useEffect } from "react";
 import { useEmployees } from "../../context/EmployeeContext";
 import { searchFilter } from "../../utils/searchFilter";
 import SearchFilter from "../../components/common/SearchFilter";
-import AssignTaskModal from "../../components/task/AssignTaskModal";
+import AssignTaskModal from "../../components/TaskManagement/AssignTaskModal";
 import { createTask } from "../../services/taskService";
 import { assignTask } from "../../services/assignTaskService";
 import { toast } from "react-toastify";

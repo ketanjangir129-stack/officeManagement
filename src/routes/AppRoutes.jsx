@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Employees from "../pages/Employees/Employees";
-import TaskDashboard from "../pages/task/TaskDashboard";
+import TaskDashboard from "../pages/TaskManagement/TaskDashboard";
 import EmployeeDetails from "../pages/Employees/EmployeeDetails";
 import EmployeeLogin from "../pages/EmployeePortal/EmployeeLogin";
 import EmployeeProtectedRoute from "./EmployeeProtectedRoute";
