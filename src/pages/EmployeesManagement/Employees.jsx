@@ -1,10 +1,10 @@
 import { useState } from "react";
-import AddEmployeeModal from "../../components/employee/AddEmployeeModal";
+import AddEmployeeModal from "../../components/employeeManagement/AddEmployeeModal";
 import { useEmployees } from "../../context/EmployeeContext";
 import SearchFilter from "../../components/common/SearchFilter";
 import {searchFilter} from "../../utils/searchFilter";
 import { useNavigate } from "react-router-dom";
-import EmployeeStats from "../../components/employee/EmployeeStats";
+import EmployeeStats from "../../components/employeeManagement/EmployeeStats";
 
 function Employees() {
   const [openModal, setOpenModal] = useState(false);
