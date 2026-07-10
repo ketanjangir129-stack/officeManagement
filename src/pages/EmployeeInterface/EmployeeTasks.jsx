@@ -3,6 +3,7 @@ import { useEmployees } from "../../context/EmployeeContext";
 import EmployeeStats from "../../components/employeeInterface/EmployeeStats";
 import EmployeeTaskTable from "../../components/employeeInterface/EmployeeTaskTable";
 import SearchFilter from "../../components/common/SearchFilter";
+import NotificationBell from "../../components/employeeInterface/NotificationBell";
 
 function EmployeeTasks() {
   const { employees } = useEmployees();
@@ -20,18 +21,25 @@ function EmployeeTasks() {
 
       {/* Header */}
 
-      <div>
-        <h1 className="text-3xl font-bold text-slate-800">
-          Welcome,
-          <span className="text-violet-600">
-            {" "}
-            {employee?.fullName}
-          </span>
-        </h1>
+      <div className="flex items-center justify-between">
 
-        <p className="mt-2 text-slate-500">
-          View and manage your assigned tasks.
-        </p>
+        <div>
+          <h1 className="text-3xl font-bold text-slate-800">
+            Welcome,
+            <span className="text-violet-600">
+              {" "}
+              {employee?.fullName}
+            </span>
+          </h1>
+
+          <p className="mt-2 text-slate-500">
+            View and manage your assigned tasks.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-5 self-end sm:self-auto">
+          <NotificationBell />
+        </div>
       </div>
 
       {/* Statistics */}

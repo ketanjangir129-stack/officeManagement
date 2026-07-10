@@ -7,6 +7,7 @@ import { createTask } from "../../services/taskService";
 import { assignTask } from "../../services/assignTaskService";
 import { toast } from "react-toastify";
 import { subscribeAssignedTasks } from "../../services/assignTaskService";
+import { createNotification } from "../../services/notificationService";
 
 
 function TaskDashboard() {
@@ -58,6 +59,12 @@ const handleAssignTask = async (taskData) => {
 
     // Create the assignment
     await assignTask(
+      selectedEmployee.id,
+      result.taskId
+    );
+
+    //create the notification
+    await createNotification(
       selectedEmployee.id,
       result.taskId
     );
