@@ -4,12 +4,14 @@ import {
 getEmployeeTasks,
 updateEmployeeTaskStatus,
 } from "../../services/employeeTaskService";
+import {searchFilter} from "../../utils/searchFilter"
 
 function EmployeeTaskTable({ employeeId, search }) {
 const [tasks, setTasks] = useState([]);
 const [loading, setLoading] = useState(true);
 const [selectedTask, setSelectedTask] = useState(null);
 const [showModal, setShowModal] = useState(false);
+const [statusFilter, setStatusFilter] = useState("all");
 // Fetch Tasks
 const loadTasks = async () => {
 setLoading(true);
@@ -31,41 +33,69 @@ loadTasks();
 }, [employeeId]);
 
 // Update Status
-const handleStatusChange = async (
-taskId,
-status
-) => {
+const handleStatusChange = async (taskId, status) => {
 const success = await updateEmployeeTaskStatus(
 employeeId,
 taskId,
 status
 );
 
-if (success) {
-await loadTasks();
+if (!success) return;
+
+setTasks((prev) =>
+prev.map((task) =>
+    task.taskId === taskId
+    ? { ...task, status }
+    : task
+)
+);
 
 setSelectedTask((prev) => ({
 ...prev,
 status,
 }));
-}
+
+setShowModal(false);
+setSelectedTask(null);
 };
 
 // Search
-const filteredTasks = tasks.filter((task) =>
-(task.title || "")
-.toLowerCase()
-.includes(search.toLowerCase())
-);
 
-if (loading) {
-return (
-<div className="rounded-2xl bg-white p-10 text-center">
-Loading Tasks...
-</div>
-);
-}
+const filteredTasks = searchFilter(
+  tasks,
+  search,
+  ["title","status"]
+).filter((task) => {
+  if (statusFilter === "all") return true;
 
+  if (statusFilter === "Pending") {
+    return task.status === "Pending";
+  }
+
+  if (statusFilter === "In Progress") {
+    return task.status === "In Progress";
+  }
+
+  if (statusFilter === "Completed") {
+    return task.status === "Completed";
+  }
+
+  return true;
+});
+
+useEffect(() => {
+const load = async () => {
+setLoading(true);
+
+const data = await getEmployeeTasks(employeeId);
+
+setTasks(data);
+
+setLoading(false);
+};
+
+load();
+}, [employeeId]);
 return (
 <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
@@ -77,21 +107,24 @@ return (
 
 <tr>
 
-    <th className="px-6 py-4 text-left">
-    Task
-    </th>
+<th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+Task
+</th>
 
-    <th className="px-6 py-4 text-left">
-    Priority
-    </th>
+<th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+Priority
+</th>
 
-    <th className="px-6 py-4 text-left">
-    Deadline
-    </th>
+<th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+Deadline
+</th>
 
-    <th className="px-6 py-4 text-left">
-    Status
-    </th>
+<th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+Status
+</th>
+<th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+Action
+</th>
 
 </tr>
 
@@ -101,45 +134,41 @@ return (
 
 {filteredTasks.length > 0 ? (
 
-    filteredTasks.map((task) => (
+filteredTasks.map((task) => (
 
-    <tr
-        key={task.taskId}
-        className="border-t hover:bg-slate-50"
+<tr
+    key={task.taskId}
+    className="border-b border-slate-100 transition hover:bg-violet-50"
+>
+
+        <td className="px-6 py-4 font-medium text-slate-700">
+    
+        {task.title}
+    
+    </td>
+
+    <td className="px-6 py-4">
+
+    <span
+        className={`rounded-full px-3 py-1 text-sm font-medium
+        ${
+        task.priority === "High"
+            ? "bg-red-100 text-red-700"
+            : task.priority === "Medium"
+            ? "bg-yellow-100 text-yellow-700"
+            : "bg-green-100 text-green-700"
+        }`}
     >
+        {task.priority}
+    </span>
 
-        <td className="px-6 py-4">
-        <h3 className="font-semibold">
-            {task.title}
-        </h3>
+    </td>
 
-        <p className="text-sm text-slate-500">
-            {task.description}
-        </p>
-        </td>
+    <td className="px-6 py-4 text-slate-600">
+    {task.deadline}
+    </td>
 
-        <td className="px-6 py-4">
-
-        <span
-            className={`rounded-full px-3 py-1 text-sm font-medium
-            ${
-            task.priority === "High"
-                ? "bg-red-100 text-red-700"
-                : task.priority === "Medium"
-                ? "bg-yellow-100 text-yellow-700"
-                : "bg-green-100 text-green-700"
-            }`}
-        >
-            {task.priority}
-        </span>
-
-        </td>
-
-        <td className="px-6 py-4">
-        {task.deadline}
-        </td>
-
-        <td className="px-6 py-4">
+    <td className="px-6 py-4">
 <span
 className={`rounded-full px-3 py-1 text-sm font-medium
 ${
@@ -163,22 +192,22 @@ View
 </button>
 </td>
 
-    </tr>
+</tr>
 
-    ))
+))
 
 ) : (
 
-    <tr>
+<tr>
 
-    <td
-        colSpan={5}
-        className="py-10 text-center text-slate-500"
-    >
-        No Tasks Found
-    </td>
+<td
+    colSpan={5}
+    className="py-10 text-center text-slate-500"
+>
+    No Tasks Found
+</td>
 
-    </tr>
+</tr>
 
 )}
 
