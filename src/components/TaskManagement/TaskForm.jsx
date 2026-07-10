@@ -23,12 +23,19 @@ const [errors, setErrors] = useState({});
 // ------------------------
 
 const handleChange = (e) => {
-const { name, value } = e.target;
+  const { name, value } = e.target;
 
-setFormData((prev) => ({
-...prev,
-[name]: value,
-}));
+  setFormData((prev) => ({
+  ...prev,
+  [name]: value,
+  }));
+  // Remove error only when actual value exists
+  if (value.trim()) {
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+  }
 };
 
 // ------------------------

@@ -8,6 +8,8 @@ import { assignTask } from "../../services/assignTaskService";
 import { toast } from "react-toastify";
 import { subscribeAssignedTasks } from "../../services/assignTaskService";
 import { createNotification } from "../../services/notificationService";
+import Pagination from "../../components/common/Pagination";
+import usePagination from "../../hooks/usePagination";
 
 
 function TaskDashboard() {
@@ -26,10 +28,25 @@ const [assignedTasks, setAssignedTasks] = useState({});
 const [showAssignModal, setShowAssignModal] = useState(false);
 
 const filteredEmployees = searchFilter(
-employees,
-search,
-["fullName", "employeeId"]
+  employees,
+  search,
+  ["fullName", "employeeId"]
 );
+
+  //Pagination hook used here
+  const {
+    currentPage,
+    totalPages,
+    paginatedData,
+    goToPage,
+    nextPage,
+    prevPage,
+    setCurrentPage
+  } = usePagination(filteredEmployees, 5);
+  //resets pagination when searching employees
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
 
 // Open Modal
 const handleAssignClick = (employee) => {
@@ -78,6 +95,8 @@ const handleAssignTask = async (taskData) => {
     toast.error("Something went wrong");
   }
 };
+
+
 
 //loader
 if (loading) {
@@ -171,9 +190,9 @@ return (
 
         <tbody>
 
-          {filteredEmployees.length > 0 ? (
+          {paginatedData.length > 0 ? (
 
-            filteredEmployees.map((employee) => (
+            paginatedData.map((employee) => (
 
               <tr
                 key={employee.id}
@@ -242,6 +261,13 @@ return (
         </tbody>
 
       </table>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={goToPage}
+        onNext={nextPage}
+        onPrev={prevPage}
+      />
 
     </div>
 
