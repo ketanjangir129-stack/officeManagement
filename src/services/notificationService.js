@@ -6,6 +6,7 @@ import {
   onValue,
   update,
 } from "firebase/database";
+import { getTaskById } from "./taskService";
 
 export const createNotification = async (
   employeeId,
@@ -50,4 +51,31 @@ export const markAsRead = async (
       read: true,
     }
   );
+};
+
+export const createUnassignNotification = async (
+  employeeId,
+  taskId
+) => {
+  try {
+    const task = await getTaskById(taskId);
+
+    const notificationRef = push(
+      ref(db, `notifications/${employeeId}`)
+    );
+
+    await set(notificationRef, {
+      title: "Task Unassigned",
+      message: `Task has been unassigned`,
+      taskId,
+      type: "unassign",
+      createdAt: Date.now(),
+      read: false,
+    });
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 };

@@ -130,7 +130,13 @@ function NotificationBell(){
                                     <div className="flex items-start justify-between gap-3">
                                         <div className="flex gap-3">
                                             <div>
-                                                <div className="inline-flex rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700">
+                                                <div
+                                                    className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
+                                                        notification.type === "unassign"
+                                                        ? "bg-red-100 text-red-700"
+                                                        : "bg-violet-100 text-violet-700"
+                                                    }`}
+                                                >
                                                     {notification.message}
                                                 </div>
 

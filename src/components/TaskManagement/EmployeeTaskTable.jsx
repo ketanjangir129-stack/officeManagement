@@ -3,23 +3,16 @@ import { removeTaskAssignment } from "../../services/assignTaskService";
 import TaskDetailsModal from "./TaskDetailsModal";
 import EditTaskModal from "./EditTaskModal";
 import { toast } from "react-toastify";
+import {createUnassignNotification,} from "../../services/notificationService";
 
 function EmployeeTaskTable({
-    employeeId,
-tasks,
-loading,
-reloadTasks,
+    employeeId,tasks,loading,reloadTasks,
 }) {
 
-
 const [selectedTask, setSelectedTask] = useState(null);
-
 const [showDetails, setShowDetails] = useState(false);
 const [showEdit, setShowEdit] = useState(false);
-
 const [showDelete, setShowDelete] = useState(false);
-
-
 
 const handleView = (task) => {
     setSelectedTask(task);
@@ -32,16 +25,24 @@ const handleEdit = (task) => {
 };
 
 const handleRemoveAssignment = async (taskId) => {
-const success = await removeTaskAssignment(
+  const success = await removeTaskAssignment(
     employeeId,
     taskId
-);
+  );
 
-if (success) {
+  if (success) {
+
+    await createUnassignNotification(
+      employeeId,
+      taskId
+    );
+
     toast.success("Task Unassigned");
+
     reloadTasks();
-}
+  }
 };
+
 if (loading) {
     return (
         <div className="rounded-2xl bg-white p-10 text-center">
@@ -101,7 +102,7 @@ return (
 
                                         <span
                                             className={`rounded-full px-3 py-1 text-sm
-        ${task.priority === "High"
+                                                ${task.priority === "High"
                                                     ? "bg-red-100 text-red-700"
                                                     : task.priority === "Medium"
                                                         ? "bg-yellow-100 text-yellow-700"
@@ -140,20 +141,16 @@ return (
                                             </button>
 
                                             <button
-onClick={() =>
-    handleRemoveAssignment(task.taskId)
-}
-className="rounded-lg bg-orange-500 px-3 py-2 text-white hover:bg-orange-600"
->
-Un Assign
-</button>
-
+                                                onClick={() =>
+                                                    handleRemoveAssignment(task.taskId)
+                                                }
+                                                className="rounded-lg bg-orange-500 px-3 py-2 text-white hover:bg-orange-600"
+                                                >
+                                                Un Assign
+                                            </button>
                                         </div>
-
                                     </td>
-
                                 </tr>
-
                             ))
 
                         ) : (
