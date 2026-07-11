@@ -282,15 +282,18 @@ function TaskDashboard() {
                 </tbody>
 
               </table>
+                
+              {/* Pagination component */}
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={goToPage}
+                onNext={nextPage}
+                onPrev={prevPage}
+              />
             </div>
           </div>
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={goToPage}
-            onNext={nextPage}
-            onPrev={prevPage}
-          />
+         
 
           {/* Assign Task Modal */}
           <AssignTaskModal

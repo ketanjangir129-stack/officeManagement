@@ -19,6 +19,7 @@ export const createNotification = async (
   await set(notificationRef, {
     message: "New Task Assigned",
     taskId,
+    type: "assign",
     read: false,
     createdAt: Date.now(),
   });
