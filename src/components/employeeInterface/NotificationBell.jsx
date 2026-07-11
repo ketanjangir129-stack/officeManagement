@@ -1,6 +1,6 @@
 import {useState,useEffect} from "react";
 import { FiBell, FiClock, FiX } from "react-icons/fi";
-import { subscribeNotifications } from "../../services/notificationService";
+import { subscribeNotifications,markAsRead } from "../../services/notificationService";
 import { subscribeTasks } from "../../services/taskService";
 
 function NotificationBell(){
@@ -9,6 +9,10 @@ function NotificationBell(){
     const [notifications, setNotifications] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
     const [tasks, setTasks] = useState({});
+
+    const unreadCount = notifications.filter(
+        (notification) => !notification.read
+    ).length;
 
     const getTimeAgo = (timestamp) => {
         const seconds = Math.floor(
@@ -56,6 +60,20 @@ function NotificationBell(){
         return () => unsubscribe();
     }, []);
 
+    //Notification Handler
+    const handleNotificationClick = async (
+        notificationId
+        ) => {
+        try {
+            await markAsRead(
+            employeeId,
+            notificationId
+            );
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return(
         <div className="relative">
 
@@ -64,9 +82,9 @@ function NotificationBell(){
                 className="relative cursor-pointer"
             >
                 <FiBell size={24} />
-                {notifications.length > 0 && (
+                {unreadCount > 0 && (
                     <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-                        {notifications.length}
+                        {unreadCount}
                     </span>
                 )}
             </button>
@@ -124,7 +142,19 @@ function NotificationBell(){
 
                                 <div
                                     key={notification.id}
-                                    className="border-b border-slate-100 p-4 transition hover:bg-violet-50/50"
+                                    onClick={() =>
+                                        handleNotificationClick(
+                                        notification.id
+                                        )
+                                    }
+                                    className={`
+                                        border-b border-slate-100 p-4 transition cursor-pointer
+                                        ${
+                                        notification.read
+                                            ? "bg-white"
+                                            : "bg-violet-50"
+                                        }
+                                    `}
                                 >
 
                                     <div className="flex items-start justify-between gap-3">
