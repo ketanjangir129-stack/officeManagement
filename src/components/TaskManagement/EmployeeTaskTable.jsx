@@ -41,6 +41,10 @@ function EmployeeTaskTable({
         );
 
         if (success) {
+             await createUnassignNotification(
+      employeeId,
+      taskId
+    );
             toast.success("Task Unassigned");
             reloadTasks();
         }

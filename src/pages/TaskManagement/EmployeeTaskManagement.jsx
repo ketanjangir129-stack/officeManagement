@@ -8,6 +8,7 @@ import { createTask } from "../../services/taskService";
 import { assignTask } from "../../services/assignTaskService";
 import { toast } from "react-toastify";
 import { getEmployeeTasks } from "../../services/employeeTaskService";
+import { createNotification } from "../../services/notificationService";
 function EmployeeTaskManagement() {
     const { employeeId } = useParams();
     const navigate = useNavigate();
@@ -17,6 +18,7 @@ function EmployeeTaskManagement() {
     const employee = employees.find(
         (emp) => emp.id === employeeId
     );
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [employeeTasks, setEmployeeTasks] = useState([]);
     const [loading, setLoading] = useState(true);
     const loadEmployeeTasks = async () => {
@@ -46,8 +48,12 @@ function EmployeeTaskManagement() {
             }
 
             await assignTask(employee.id, result.taskId);
+            await createNotification(
+                    employee.id,
+                    result.taskId
+                  );
 
-            toast.success("Task Assigned");
+            toast.success("Task Assigned Successfully");
 
             setShowAssignModal(false);
         } catch (error) {
