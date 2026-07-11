@@ -76,7 +76,7 @@ function EmployeeStats({ employees }) {
             border
             border-slate-200
             rounded-3xl
-            p-6
+            p-4
             shadow-sm
             hover:shadow-lg
             hover:-translate-y-1
