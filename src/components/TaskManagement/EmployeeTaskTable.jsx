@@ -3,6 +3,7 @@ import { removeTaskAssignment } from "../../services/assignTaskService";
 import TaskDetailsModal from "./TaskDetailsModal";
 import EditTaskModal from "./EditTaskModal";
 import { toast } from "react-toastify";
+import {createUnassignNotification,} from "../../services/notificationService";
 
 function EmployeeTaskTable({
     employeeId,
@@ -25,6 +26,8 @@ function EmployeeTaskTable({
         setSelectedTask(task);
         setShowDetails(true);
     };
+
+
 
     const handleEdit = (task) => {
         setSelectedTask(task);
@@ -161,7 +164,6 @@ function EmployeeTaskTable({
                                     >
                                         No Tasks Found
                                     </td>
-
                                 </tr>
 
                             )}

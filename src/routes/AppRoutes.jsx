@@ -23,8 +23,7 @@ const AppRoutes = () => {
         <Route path="/tasks" element={<TaskDashboard />} />
 
         <Route
-          path="/tasks/employee/:employeeId"
-          element={<EmployeeTaskManagement />}
+          path="/tasks/employee/:employeeId" element={<EmployeeTaskManagement />}
         />
       </Route>
 {/* <Route
