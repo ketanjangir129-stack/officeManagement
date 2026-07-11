@@ -71,29 +71,40 @@ function EmployeeTaskManagement() {
     return (
         <div className="space-y-6">
 
-            {/* Header */}
-
             <div className="flex items-center justify-between">
-
+                {/* Header */}
                 <div>
 
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="mb-4 rounded-lg bg-slate-200 px-4 py-2 hover:bg-slate-300"
-                    >
-                        Back
-                    </button>
-
-                    <h1 className="text-3xl font-bold">
+                    <div> <h1 className="text-3xl font-bold">
                         {employee.fullName}
                     </h1>
 
-                    <p className="text-slate-500">
-                        {employee.designation}
-                    </p>
-
+                        <p className="text-slate-500">
+                            {employee.designation}
+                        </p></div>
                 </div>
+                <div>
 
+                    {/* Search */}
+
+                    <SearchFilter
+                        value={search}
+                        onChange={setSearch}
+                        placeholder="Search Task..."
+                    />
+                </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+
+
+
+                <button
+                    onClick={() => navigate(-1)}
+                    className="mb-4 rounded-lg bg-slate-200 px-4 py-2 hover:bg-slate-300"
+                >
+                    Back
+                </button>
                 <button
                     onClick={() => setShowAssignModal(true)}
                     className="rounded-xl bg-violet-600 px-5 py-3 text-white hover:bg-violet-700"
@@ -101,15 +112,11 @@ function EmployeeTaskManagement() {
                     + Assign Task
                 </button>
 
+
+
+
+
             </div>
-
-            {/* Search */}
-
-            <SearchFilter
-                value={search}
-                onChange={setSearch}
-                placeholder="Search Task..."
-            />
 
             {/* Task Table */}
 

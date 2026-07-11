@@ -114,7 +114,7 @@ function TaskDetailsModal({
             </p>
 
             <p className="mt-2">
-              {new Date(task.createdAt).toLocaleString()}
+              {new Date(task.createdAt).toLocaleString("en-gb")}
             </p>
 
           </div>

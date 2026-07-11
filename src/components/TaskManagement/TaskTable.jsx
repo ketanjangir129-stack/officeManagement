@@ -77,6 +77,9 @@ return (
                             <th className="px-6 py-4 text-left">
                                 Deadline
                             </th>
+                            <th className="px-6 py-4 text-left">
+                                Status
+                            </th>
 
                             <th className="px-6 py-4 text-center">
                                 Actions
@@ -118,7 +121,10 @@ return (
                                     </td>
 
                                     <td className="px-6 py-4">
-                                        {task.deadline}
+                                        {new Date(task.deadline).toLocaleDateString("en-gb")}
+                                    </td>
+                                     <td className="px-6 py-4">
+                                        {task.status}
                                     </td>
 
                                     <td className="px-6 py-4">

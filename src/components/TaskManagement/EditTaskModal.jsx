@@ -11,18 +11,19 @@ function EditTaskModal({
   if (!isOpen || !task) return null;
 
   const handleUpdate = async (updatedTask) => {
-    const success = await updateTask(task.id, updatedTask);
+  const success = await updateTask(
+    task.taskId,
+    updatedTask
+  );
 
-    if (success) {
-      toast.success("Task Updated Successfully");
-
-      onUpdated();
-
-      onClose();
-    } else {
-      toast.error("Failed to update task");
-    }
-  };
+  if (success) {
+    toast.success("Task Updated Successfully");
+    onUpdated();
+    onClose();
+  } else {
+    toast.error("Failed to update task");
+  }
+};
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">

@@ -78,3 +78,17 @@ export const assignTask = async (
     };
   }
 };
+
+export const updateTask = async (taskId, updatedTask) => {
+  try {
+    await update(
+      ref(db, `tasks/${taskId}`),
+      updatedTask
+    );
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
