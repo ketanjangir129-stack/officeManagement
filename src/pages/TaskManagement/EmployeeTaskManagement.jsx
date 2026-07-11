@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEmployees } from "../../context/EmployeeContext";
-import TaskTable from "../../components/TaskManagement/TaskTable"
+import EmployeeTaskTable from "../../components/TaskManagement/EmployeeTaskTable"
 import SearchFilter from "../../components/common/SearchFilter";
 import AssignTaskModal from "../../components/TaskManagement/AssignTaskModal";
 import { createTask } from "../../services/taskService";
@@ -81,7 +81,7 @@ function EmployeeTaskManagement() {
                         onClick={() => navigate(-1)}
                         className="mb-4 rounded-lg bg-slate-200 px-4 py-2 hover:bg-slate-300"
                     >
-                        ← Back
+                        Back
                     </button>
 
                     <h1 className="text-3xl font-bold">
@@ -113,11 +113,11 @@ function EmployeeTaskManagement() {
 
             {/* Task Table */}
 
-            <TaskTable
+            <EmployeeTaskTable
                 tasks={employeeTasks}
                 loading={loading}
                 reloadTasks={loadEmployeeTasks}
-                employeeId={employee.id}
+                employeeId={employeeId}
             />
 
             {/* Assign Modal */}

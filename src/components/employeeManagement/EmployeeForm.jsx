@@ -6,7 +6,7 @@ function EmployeeForm({ onClose }) {
   const { addEmployee } = useEmployees();
 
   const [formData, setFormData] = useState({
-    employeeId: "JAI"+" ",
+    employeeId:"",
     fullName: "",
     email: "",
     phone: "",
@@ -32,10 +32,13 @@ function EmployeeForm({ onClose }) {
       [name]: value,
     }));
 
-    setErrors((prev) => ({
-      ...prev,
-      [name]: "",
-    }));
+    // Remove error only when actual value exists
+    if (value.trim()) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
   };
 
   //Validation function to check for empty fields and invalid inputs
@@ -107,16 +110,21 @@ function EmployeeForm({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log("Form Data:", formData);
     if (!validateForm()) return;
     try {
-      await addEmployee(formData);
-      console.log("Employee Saved Successfully");
-      onClose();
-      toast.success("Employee added successfully!");
+      const result = await addEmployee(formData);
+      if (!result.success) {
+        setErrors((prev) => ({
+          ...prev,
+          ...result.errors,
+        }));
 
+        return;
+      }
+      toast.success("Employee added successfully!");
+      onClose();
     } catch (error) {
-      console.error("Save Error:", error);
+      console.error(error);
     }
   };
 

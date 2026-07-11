@@ -7,6 +7,7 @@ import {
     get,
     update,
     remove,
+    onValue
 } from "firebase/database";
 
 const tasksRef= ref(db,"tasks");
@@ -115,4 +116,10 @@ export const updateEmployeeStatus = async(
     console.error(error);
     return false
 }
+};
+
+export const subscribeTasks = (callback) => {
+  return onValue(tasksRef, (snapshot) => {
+    callback(snapshot.val() || {});
+  });
 };

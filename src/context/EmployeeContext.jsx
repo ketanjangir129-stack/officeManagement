@@ -34,23 +34,71 @@ export const EmployeeProvider = ({ children }) => {
   };
 
   const addEmployee = async (employeeData) => {
-  try {
-    console.log("Starting Firebase Write");
+    try {
+      const duplicateErrors = {};
 
-    const employeeRef = push(ref(db, "employees"));
+      const employeeIdExists = employees.some(
+        (employee) =>
+          employee.employeeId?.trim().toLowerCase() ===
+          employeeData.employeeId?.trim().toLowerCase()
+      );
 
-    // console.log("Generated Key:", employeeRef.key);
+      if (employeeIdExists) {
+        duplicateErrors.employeeId =
+          "Employee ID already exists";
+      }
 
-    await set(employeeRef, {
-      ...employeeData,
-      createdAt: Date.now(),
-    });
+      const emailExists = employees.some(
+        (employee) =>
+          employee.email?.trim().toLowerCase() ===
+          employeeData.email?.trim().toLowerCase()
+      );
 
-    console.log("Firebase Write Completed");
-  } catch (error) {
-    console.error("Firebase Error:", error);
-  }
-};
+      if (emailExists) {
+        duplicateErrors.email =
+          "Email already exists";
+      }
+
+      const phoneExists = employees.some(
+        (employee) =>
+          employee.phone?.trim() ===
+          employeeData.phone?.trim()
+      );
+
+      if (phoneExists) {
+        duplicateErrors.phone =
+          "Phone number already exists";
+      }
+
+      if (Object.keys(duplicateErrors).length > 0) {
+        return {
+          success: false,
+          errors: duplicateErrors,
+        };
+      }
+
+      const employeeRef = push(ref(db, "employees"));
+
+      await set(employeeRef, {
+        ...employeeData,
+        createdAt: Date.now(),
+      });
+
+      return {
+        success: true,
+      };
+
+    } catch (error) {
+      console.error(error);
+
+      return {
+        success: false,
+        errors: {
+          general: "Something went wrong",
+        },
+      };
+    }
+  };
 
   // update Employee
   const updateEmployee = async (employeeId,updatedData) => {

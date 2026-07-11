@@ -13,6 +13,7 @@ export const subscribeAssignedTasks = (callback) => {
 export const globaldelete = async (taskId) => {
   try {
     // Delete task
+     
     await remove(ref(db, `tasks/${taskId}`));
 
     // Get all assignments

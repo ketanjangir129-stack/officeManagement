@@ -3,7 +3,7 @@ import { getAllTasks } from "../../services/taskService";
 import SearchFilter from "../../components/common/SearchFilter";
 import TaskTable from "../../components/TaskManagement/TaskTable";
 import { useParams } from "react-router-dom";
-import EmployeeTaskTable from "../../components/TaskManagement/EmployeeTaskTable";
+
 
 
 
@@ -20,11 +20,11 @@ const { id } = useParams();
 
     if (data) {
       const taskArray = Object.entries(data).map(
-        ([id, value]) => ({
-          id,
-          ...value,
-        })
-      );
+  ([taskId, value]) => ({
+    taskId,
+    ...value,
+  })
+);
 
       setTasks(taskArray);
     } else {
@@ -112,7 +112,7 @@ const { id } = useParams();
 
       {/* Table */}
 
-      <EmployeeTaskTable
+      <TaskTable
         tasks={filteredTasks}
         loading={loading}
         reloadTasks={loadTasks}

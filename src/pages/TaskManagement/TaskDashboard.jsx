@@ -8,6 +8,12 @@ import SearchFilter from "../../components/common/SearchFilter";
 import AssignTaskModal from "../../components/TaskManagement/AssignTaskModal";
 
 import { createTask } from "../../services/taskService";
+
+
+import { createNotification } from "../../services/notificationService";
+import Pagination from "../../components/common/Pagination";
+import usePagination from "../../hooks/usePagination";
+
 import {
   assignTask,
   subscribeAssignedTasks,
@@ -37,6 +43,21 @@ function TaskDashboard() {
     ["fullName", "employeeId"]
   );
 
+  //Pagination hook used here
+  const {
+    currentPage,
+    totalPages,
+    paginatedData,
+    goToPage,
+    nextPage,
+    prevPage,
+    setCurrentPage
+  } = usePagination(filteredEmployees, 5);
+  //resets pagination when searching employees
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search,setCurrentPage]);
+
   // Open Modal
   const handleAssignClick = (employee) => {
     setSelectedEmployee(employee);
@@ -63,35 +84,40 @@ function TaskDashboard() {
 
       await assignTask(selectedEmployee.id, result.taskId);
 
+      await createNotification(
+        selectedEmployee.id,
+        result.taskId
+      );
+
       toast.success("Task Assigned Successfully");
 
       closeModal();
 
-      // Open Task Management page
       setActiveTab("tasks");
-
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong");
     }
   };
 
-  // Loader
+
+  //loader
   if (loading) {
     return (
       <div className="flex items-center justify-center h-[70vh]">
         <div className="text-center">
+
           <div
             className="
-              w-12
-              h-12
-              border-4
-              border-violet-200
-              border-t-violet-600
-              rounded-full
-              animate-spin
-              mx-auto
-            "
+            w-12
+            h-12
+            border-4
+            border-violet-200
+            border-t-violet-600
+            rounded-full
+            animate-spin
+            mx-auto
+          "
           />
           <p className="mt-4 text-slate-600">
             Loading employees...
@@ -176,19 +202,23 @@ function TaskDashboard() {
                       Action
                     </th>
                   </tr>
+
+
+
                 </thead>
 
                 <tbody>
-                  {filteredEmployees.length > 0 ? (
-                    filteredEmployees.map((employee) => (
 
+                  {paginatedData.length > 0 ? (
 
+                    paginatedData.map((employee) => (
 
                       <tr
                         key={employee.id}
                         onClick={() => navigate(`/tasks/employee/${employee.id}`)}
-                        className="cursor-pointer hover:bg-violet-50 transition"
+                        className="border-b border-slate-100 transition hover:bg-violet-50 cursor-pointer"
                       >
+
                         <td className="px-6 py-4 font-medium text-slate-700">
                           {employee.employeeId}
                         </td>
@@ -206,40 +236,61 @@ function TaskDashboard() {
                         </td>
 
                         <td className="px-6 py-4 text-center">
+
                           <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
+
                             {assignedTasks[employee.id]
                               ? Object.keys(assignedTasks[employee.id]).length
                               : 0}
                           </span>
+
                         </td>
 
                         <td className="px-6 py-4 text-center">
+
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleAssignClick(employee);
                             }}
-                            className="rounded-xl bg-violet-600 px-4 py-2 text-white"
+                            className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-violet-700"
                           >
                             Assign Task
                           </button>
+
                         </td>
+
                       </tr>
+
                     ))
+
                   ) : (
+
                     <tr>
+
                       <td
                         colSpan={6}
                         className="py-10 text-center text-slate-500"
                       >
                         No Employees Found
                       </td>
+
                     </tr>
+
                   )}
+
                 </tbody>
+
               </table>
             </div>
           </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={goToPage}
+            onNext={nextPage}
+            onPrev={prevPage}
+          />
 
           {/* Assign Task Modal */}
           <AssignTaskModal
@@ -250,6 +301,7 @@ function TaskDashboard() {
           />
         </>
       )}
+
 
       {activeTab === "tasks" && <TaskManagement />}
     </div>

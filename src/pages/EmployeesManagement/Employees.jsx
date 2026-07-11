@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddEmployeeModal from "../../components/employeeManagement/AddEmployeeModal";
 import { useEmployees } from "../../context/EmployeeContext";
 import SearchFilter from "../../components/common/SearchFilter";
 import {searchFilter} from "../../utils/searchFilter";
 import { useNavigate } from "react-router-dom";
 import EmployeeStats from "../../components/employeeManagement/EmployeeStats";
+import Pagination from "../../components/common/Pagination";
+import usePagination from "../../hooks/usePagination";
 
 function Employees() {
   const [openModal, setOpenModal] = useState(false);
@@ -27,6 +29,13 @@ function Employees() {
       }
       return true;
   });
+
+ //Pagination hook used here
+  const {currentPage,totalPages,paginatedData,goToPage,nextPage,prevPage,setCurrentPage} = usePagination(filteredEmployees,5);
+  //resets pagination when searching employees
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, statusFilter]);
 
   //loader
   if (loading) {
@@ -165,8 +174,8 @@ function Employees() {
             </thead>
 
             <tbody>
-              {filteredEmployees.length > 0 ? (
-                filteredEmployees.map((employee) => (
+              {paginatedData.length > 0 ? (
+                paginatedData.map((employee) => (
                   <tr
                     key={employee.id}
                     className="
@@ -244,6 +253,13 @@ function Employees() {
               )}
             </tbody>
           </table>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={goToPage}
+            onNext={nextPage}
+            onPrev={prevPage}
+          />
         </div>
       </div>
 
