@@ -3,7 +3,7 @@ import { removeTaskAssignment } from "../../services/assignTaskService";
 import TaskDetailsModal from "./TaskDetailsModal";
 import EditTaskModal from "./EditTaskModal";
 import { toast } from "react-toastify";
-import {createUnassignNotification,} from "../../services/notificationService";
+import { createUnassignNotification, } from "../../services/notificationService";
 
 function EmployeeTaskTable({
     employeeId,
@@ -35,17 +35,26 @@ function EmployeeTaskTable({
     };
 
     const handleRemoveAssignment = async (taskId) => {
+        const confirmDelete = window.confirm(
+                  "Un-Assign this task for this employee?"
+                );
+
+                if (!confirmDelete) return;
+
         const success = await removeTaskAssignment(
             employeeId,
             taskId
         );
 
         if (success) {
-             await createUnassignNotification(
-      employeeId,
-      taskId
-    );
+            await createUnassignNotification(
+                employeeId,
+                taskId
+            );
             toast.success("Task Unassigned");
+            setShowDetails(false);
+            setShowEdit(false);
+            setSelectedTask(null);
             reloadTasks();
         }
     };
@@ -80,6 +89,9 @@ function EmployeeTaskTable({
                                 <th className="px-6 py-4 text-left">
                                     Deadline
                                 </th>
+                                <th className="px-6 py-4 text-left">
+                                    Status
+                                </th>
 
                                 <th className="px-6 py-4 text-center">
                                     Actions
@@ -96,10 +108,11 @@ function EmployeeTaskTable({
                                 tasks.map((task) => (
 
                                     <tr
+                                        key={task.taskId}
                                         onClick={() =>
                                             handleView(task)
                                         }
-                                        key={task.taskId}
+
                                         className="border-t hover:bg-slate-50"
                                     >
 
@@ -111,7 +124,7 @@ function EmployeeTaskTable({
 
                                             <span
                                                 className={`rounded-full px-3 py-1 text-sm
-        ${task.priority === "High"
+    ${task.priority === "High"
                                                         ? "bg-red-100 text-red-700"
                                                         : task.priority === "Medium"
                                                             ? "bg-yellow-100 text-yellow-700"
@@ -126,25 +139,40 @@ function EmployeeTaskTable({
                                         <td className="px-6 py-4">
                                             {new Date(task.deadline).toLocaleDateString("en-gb")}
                                         </td>
-
+                                        <td className="px-6 py-4">
+                                           <span
+className={`rounded-full px-3 py-1 text-sm font-medium
+${
+task.status === "Completed"
+? "bg-green-100 text-green-700"
+: task.status === "In Progress"
+? "bg-yellow-100 text-yellow-700"
+: "bg-blue-100 text-blue-700"
+}`}
+>
+{task.status}
+</span>
+                                        </td>
                                         <td className="px-6 py-4">
 
                                             <div className="flex justify-center gap-2">
 
 
                                                 <button
-                                                    onClick={() =>
-                                                        handleEdit(task.taskId)
-                                                    }
+                                                    onClick={(e) => {
+    e.stopPropagation();
+    handleEdit(task);
+}}
                                                     className="rounded-lg bg-green-600 px-3 py-2 text-white hover:bg-green-700"
                                                 >
                                                     Edit
                                                 </button>
 
                                                 <button
-                                                    onClick={() =>
-                                                        handleRemoveAssignment(task.taskId)
-                                                    }
+                                                onClick={(e) => {
+    e.stopPropagation();
+    handleRemoveAssignment(task.taskId);
+}}
                                                     className="rounded-lg bg-orange-500 px-3 py-2 text-white hover:bg-orange-600"
                                                 >
                                                     Un Assign

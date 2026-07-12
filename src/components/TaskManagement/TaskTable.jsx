@@ -5,9 +5,10 @@ import EditTaskModal from "./EditTaskModal";
 import { toast } from "react-toastify";
 
 function TaskTable({
+    employeeId,
 tasks,
 loading,
-reloadTasks,
+assignedTasks
 }) {
 
 
@@ -30,22 +31,7 @@ const handleEdit = (task) => {
     setShowEdit(true);
 };
 
-const handleglobaldelete = async (taskId) => {
-const confirmDelete = window.confirm(
-    "Delete this task for all employees?"
-);
 
-if (!confirmDelete) return;
-
-const success = await globaldelete(taskId);
-
-if (success) {
-    toast.success("Task Deleted Successfully");
-    reloadTasks();
-} else {
-    toast.error("Failed to delete task");
-}
-};
 if (loading) {
     return (
         <div className="rounded-2xl bg-white p-10 text-center">
@@ -54,6 +40,8 @@ if (loading) {
     );
 }
 return (
+
+  
     <div className="space-y-6">
 
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -77,9 +65,9 @@ return (
                             <th className="px-6 py-4 text-left">
                                 Deadline
                             </th>
-                            <th className="px-6 py-4 text-left">
-                                Status
-                            </th>
+                            <th className="px-6 py-4 text-center">
+  Assigned
+</th>
 
                             <th className="px-6 py-4 text-center">
                                 Actions
@@ -90,98 +78,101 @@ return (
                     </thead>
 
                     <tbody>
+  {tasks.length > 0 ? (
+    tasks.map((task) => (
+        
+      <tr
+        key={task.taskId}
+        onClick={() => handleView(task)}
+        className="cursor-pointer border-t transition hover:bg-slate-50"
+      >
+        <td className="px-6 py-4 font-medium">
+          {task.title}
+        </td>
 
-                        {tasks.length > 0 ? (
+        <td className="px-6 py-4">
+          <span
+            className={`rounded-full px-3 py-1 text-sm font-semibold ${
+              task.priority === "High"
+                ? "bg-red-100 text-red-700"
+                : task.priority === "Medium"
+                ? "bg-yellow-100 text-yellow-700"
+                : "bg-green-100 text-green-700"
+            }`}
+          >
+            {task.priority}
+          </span>
+        </td>
 
-                            tasks.map((task) => (
+        <td className="px-6 py-4">
+          {new Date(task.deadline).toLocaleDateString("en-gb")}
+        </td>
+<td className="px-6 py-4 text-center">
+  <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
+    {
+          Object.values(assignedTasks || {}).filter(
+            (employee) => employee[task.taskId]
+          ).length
+        }
+  </span>
+</td>
+        <td className="px-6 py-4">
+          <div className="flex justify-center gap-2">
 
-                                <tr
-                                    key={task.taskId}
-                                    className="border-t hover:bg-slate-50"
-                                >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEdit(task);
+              }}
+              className="rounded-lg bg-green-600 px-3 py-2 text-white hover:bg-green-700"
+            >
+              Edit
+            </button>
 
-                                    <td className="px-6 py-4">
-                                        {task.title}
-                                    </td>
+            <button
+              onClick={async (e) => {
+                e.stopPropagation();
 
-                                    <td className="px-6 py-4">
+                const confirmDelete = window.confirm(
+                  "Delete this task for all employees?"
+                );
 
-                                        <span
-                                            className={`rounded-full px-3 py-1 text-sm
-        ${task.priority === "High"
-                                                    ? "bg-red-100 text-red-700"
-                                                    : task.priority === "Medium"
-                                                        ? "bg-yellow-100 text-yellow-700"
-                                                        : "bg-green-100 text-green-700"
-                                                }`}
-                                        >
-                                            {task.priority}
-                                        </span>
+                if (!confirmDelete) return;
 
-                                    </td>
+                const success = await globaldelete(task.taskId);
 
-                                    <td className="px-6 py-4">
-                                        {new Date(task.deadline).toLocaleDateString("en-gb")}
-                                    </td>
-                                     <td className="px-6 py-4">
-                                        {task.status}
-                                    </td>
+                if (success) {
+                  toast.success("Task Deleted Successfully");
 
-                                    <td className="px-6 py-4">
+                  setShowDetails(false);
+                  setShowEdit(false);
+                  setSelectedTask(null);
 
-                                        <div className="flex justify-center gap-2">
+                  
+                } else {
+                  toast.error("Failed to delete task");
+                }
+              }}
+              className="rounded-lg bg-red-600 px-3 py-2 text-white hover:bg-red-700"
+            >
+              Delete
+            </button>
 
-                                            <button
-                                                onClick={() =>
-                                                    handleView(task)
-                                                }
-                                                className="rounded-lg bg-blue-600 px-3 py-2 text-white hover:bg-blue-700"
-                                            >
-                                                View
-                                            </button>
-
-                                            <button
-                                                onClick={() =>
-                                                    handleEdit(task)
-                                                }
-                                                className="rounded-lg bg-green-600 px-3 py-2 text-white hover:bg-green-700"
-                                            >
-                                                Edit
-                                            </button>
-
-                                            <button
-                                                onClick={() =>
-                                                    handleglobaldelete(task.taskId)
-                                                }
-                                                className="rounded-lg bg-orange-500 px-3 py-2 text-white hover:bg-orange-600"
-                                            >
-                                                Delete
-                                            </button>
-
-                                        </div>
-
-                                    </td>
-
-                                </tr>
-
-                            ))
-
-                        ) : (
-
-                            <tr>
-
-                                <td
-                                    colSpan={4}
-                                    className="py-10 text-center text-slate-500"
-                                >
-                                    No Tasks Found
-                                </td>
-
-                            </tr>
-
-                        )}
-
-                    </tbody>
+          </div>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td
+        colSpan={4}
+        className="py-10 text-center text-slate-500"
+      >
+        No Tasks Found
+      </td>
+    </tr>
+  )}
+</tbody>
 
                 </table>
 
@@ -199,7 +190,7 @@ return (
             isOpen={showEdit}
             task={selectedTask}
             onClose={() => setShowEdit(false)}
-            onUpdated={reloadTasks}
+            
         />
 
     </div>

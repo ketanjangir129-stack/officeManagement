@@ -93,7 +93,7 @@ function TaskDashboard() {
 
       closeModal();
 
-      setActiveTab("tasks");
+      
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong");

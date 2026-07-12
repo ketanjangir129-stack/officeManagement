@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import EmployeeTaskModal from "./EmployeeTaskModal";
 import {
 getEmployeeTasks,
-updateEmployeeTaskStatus,
+updateEmployeeTaskStatus,subscribeEmployeeTasks
 } from "../../services/employeeTaskService";
 import {searchFilter} from "../../utils/searchFilter"
 
@@ -13,23 +13,24 @@ const [selectedTask, setSelectedTask] = useState(null);
 const [showModal, setShowModal] = useState(false);
 const [statusFilter, setStatusFilter] = useState("all");
 // Fetch Tasks
-const loadTasks = async () => {
-setLoading(true);
 
-const data = await getEmployeeTasks(employeeId);
-
-setTasks(data);
-setLoading(false);
-};
 const handleViewTask = (task) => {
 setSelectedTask(task);
 setShowModal(true);
 };
 
 useEffect(() => {
-if (employeeId) {
-loadTasks();
-}
+    if (!employeeId) return;
+
+    const unsubscribe = subscribeEmployeeTasks(
+        employeeId,
+        (tasks) => {
+            setTasks(tasks);
+            setLoading(false);
+        }
+    );
+
+    return () => unsubscribe();
 }, [employeeId]);
 
 // Update Status

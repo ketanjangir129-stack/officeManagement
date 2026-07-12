@@ -6,7 +6,6 @@ function EditTaskModal({
   isOpen,
   task,
   onClose,
-  onUpdated,
 }) {
   if (!isOpen || !task) return null;
 
@@ -18,7 +17,6 @@ function EditTaskModal({
 
   if (success) {
     toast.success("Task Updated Successfully");
-    onUpdated();
     onClose();
   } else {
     toast.error("Failed to update task");

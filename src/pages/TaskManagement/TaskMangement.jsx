@@ -1,124 +1,77 @@
 import { useEffect, useState } from "react";
-import { getAllTasks } from "../../services/taskService";
 import SearchFilter from "../../components/common/SearchFilter";
+import { searchFilter } from "../../utils/searchFilter"
 import TaskTable from "../../components/TaskManagement/TaskTable";
-import { useParams } from "react-router-dom";
-
-
-
+import { subscribeTasks } from "../../services/taskService";
+import { subscribeAssignedTasks } from "../../services/assignTaskService";
 
 function TaskManagement() {
   const [tasks, setTasks] = useState([]);
+  const [assignedTasks, setAssignedTasks] = useState({});
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [loading, setLoading] = useState(true);
-const { id } = useParams();
-  const loadTasks = async () => {
-    setLoading(true);
-
-    const data = await getAllTasks();
-
-    if (data) {
-      const taskArray = Object.entries(data).map(
-  ([taskId, value]) => ({
-    taskId,
-    ...value,
-  })
-);
-
-      setTasks(taskArray);
-    } else {
-      setTasks([]);
-    }
-
-    setLoading(false);
-  };
+  const [priorityFilter, setPriorityFilter] = useState("all");
+  const searchedTasks = searchFilter(tasks, search, [
+    "title",
+    "deadline",
+  ]);
 
   useEffect(() => {
-    loadTasks();
-  }, []);
-
-  const filteredTasks = tasks
-    .filter((task) =>
-      task.title.toLowerCase().includes(search.toLowerCase())
-    )
-    .filter((task) => {
-      if (statusFilter === "all") return true;
-
-      const employees = Object.values(
-        task.assignedEmployees || {}
-      );
-
-      return employees.some(
-        (emp) => emp.status === statusFilter
-      );
+    const unsubscribe = subscribeTasks((taskArray) => {
+      setTasks(taskArray);
+      setLoading(false);
     });
 
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = subscribeAssignedTasks(setAssignedTasks);
+
+    return () => unsubscribe();
+  }, []);
+
+
+  
+const filteredTasks = searchedTasks.filter((task) => {
+  const statusMatch =
+    statusFilter === "all" || task.status === statusFilter;
+
+  const priorityMatch =
+    priorityFilter === "all" || task.priority === priorityFilter;
+
+  return statusMatch && priorityMatch;
+});
   return (
-    <div className="space-y-6">
+    <>
+      {/* search bar */}
+      <div className="mb-6 flex items-center gap-4">
+        <SearchFilter
+          value={search}
+          onChange={setSearch}
+          placeholder="Search by title, priority or deadline..."
+        />
 
-      {/* Header */}
-
-      <div>
-        <h1 className="text-3xl font-bold">
-          Task Management
-        </h1>
-
-        <p className="text-slate-500">
-          Manage all employee tasks
-        </p>
+        <select
+  value={priorityFilter}
+  onChange={(e) => setPriorityFilter(e.target.value)}
+  className="rounded-lg border px-4 py-2"
+>
+  <option value="all">All Priority</option>
+  <option value="High">High</option>
+  <option value="Medium">Medium</option>
+  <option value="Low">Low</option>
+</select>
       </div>
-
-      {/* Search + Filter */}
-
-      <div className="rounded-2xl bg-white p-5 shadow">
-
-        <div className="flex gap-4">
-
-          <SearchFilter
-            value={search}
-            onChange={setSearch}
-            placeholder="Search task..."
-          />
-
-          <select
-            value={statusFilter}
-            onChange={(e) =>
-              setStatusFilter(e.target.value)
-            }
-            className="rounded-xl border px-4"
-          >
-            <option value="all">
-              All
-            </option>
-
-            <option value="Pending">
-              Pending
-            </option>
-
-            <option value="In Progress">
-              In Progress
-            </option>
-
-            <option value="Completed">
-              Completed
-            </option>
-
-          </select>
-
-        </div>
-
-      </div>
-
-      {/* Table */}
+      {/* your UI */}
 
       <TaskTable
         tasks={filteredTasks}
         loading={loading}
-        reloadTasks={loadTasks}
+        assignedTasks={assignedTasks}
       />
-
-    </div>
+    </>
   );
 }
 

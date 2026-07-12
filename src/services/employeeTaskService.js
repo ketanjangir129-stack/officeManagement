@@ -1,6 +1,41 @@
 import { db } from "../firebase/firebase";
-import { ref, get, update } from "firebase/database";
+import { ref, get, update , onValue} from "firebase/database";
 
+
+export const subscribeEmployeeTasks = (
+  employeeId,
+  callback
+) => {
+  const assignRef = ref(db, `assignTask/${employeeId}`);
+
+  return onValue(assignRef, async (snapshot) => {
+    if (!snapshot.exists()) {
+      callback([]);
+      return;
+    }
+
+    const assignedTasks = snapshot.val();
+
+    const tasksSnapshot = await get(ref(db, "tasks"));
+
+    if (!tasksSnapshot.exists()) {
+      callback([]);
+      return;
+    }
+
+    const allTasks = tasksSnapshot.val();
+
+    const taskArray = Object.keys(assignedTasks)
+      .filter((taskId) => allTasks[taskId])
+      .map((taskId) => ({
+        taskId,
+        ...allTasks[taskId],
+        status: assignedTasks[taskId].status,
+      }));
+
+    callback(taskArray);
+  });
+};
 // Fetch all tasks assigned to one employee
 const getEmployeeTasks = async (employeeId) => {
   try {
