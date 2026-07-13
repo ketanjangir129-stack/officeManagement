@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { removeTaskAssignment } from "../../services/assignTaskService";
 import TaskDetailsModal from "./TaskDetailsModal";
 import EditTaskModal from "./EditTaskModal";
@@ -10,6 +10,7 @@ function EmployeeTaskTable({
     tasks,
     loading,
     reloadTasks,
+    children
 }) {
 
 
@@ -36,10 +37,10 @@ function EmployeeTaskTable({
 
     const handleRemoveAssignment = async (taskId) => {
         const confirmDelete = window.confirm(
-                  "Un-Assign this task for this employee?"
-                );
+            "Un-Assign this task for this employee?"
+        );
 
-                if (!confirmDelete) return;
+        if (!confirmDelete) return;
 
         const success = await removeTaskAssignment(
             employeeId,
@@ -58,6 +59,7 @@ function EmployeeTaskTable({
             reloadTasks();
         }
     };
+
     if (loading) {
         return (
             <div className="rounded-2xl bg-white p-10 text-center">
@@ -124,7 +126,7 @@ function EmployeeTaskTable({
 
                                             <span
                                                 className={`rounded-full px-3 py-1 text-sm
-    ${task.priority === "High"
+                                                    ${task.priority === "High"
                                                         ? "bg-red-100 text-red-700"
                                                         : task.priority === "Medium"
                                                             ? "bg-yellow-100 text-yellow-700"
@@ -140,18 +142,17 @@ function EmployeeTaskTable({
                                             {new Date(task.deadline).toLocaleDateString("en-gb")}
                                         </td>
                                         <td className="px-6 py-4">
-                                           <span
-className={`rounded-full px-3 py-1 text-sm font-medium
-${
-task.status === "Completed"
-? "bg-green-100 text-green-700"
-: task.status === "In Progress"
-? "bg-yellow-100 text-yellow-700"
-: "bg-blue-100 text-blue-700"
-}`}
->
-{task.status}
-</span>
+                                            <span
+                                                className={`rounded-full px-3 py-1 text-sm font-medium
+                                                            ${task.status === "Completed"
+                                                        ? "bg-green-100 text-green-700"
+                                                        : task.status === "In Progress"
+                                                            ? "bg-yellow-100 text-yellow-700"
+                                                            : "bg-blue-100 text-blue-700"
+                                                    }`}
+                                            >
+                                                {task.status}
+                                            </span>
                                         </td>
                                         <td className="px-6 py-4">
 
@@ -160,19 +161,19 @@ task.status === "Completed"
 
                                                 <button
                                                     onClick={(e) => {
-    e.stopPropagation();
-    handleEdit(task);
-}}
+                                                        e.stopPropagation();
+                                                        handleEdit(task);
+                                                    }}
                                                     className="rounded-lg bg-green-600 px-3 py-2 text-white hover:bg-green-700"
                                                 >
                                                     Edit
                                                 </button>
 
                                                 <button
-                                                onClick={(e) => {
-    e.stopPropagation();
-    handleRemoveAssignment(task.taskId);
-}}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleRemoveAssignment(task.taskId);
+                                                    }}
                                                     className="rounded-lg bg-orange-500 px-3 py-2 text-white hover:bg-orange-600"
                                                 >
                                                     Un Assign
@@ -203,7 +204,7 @@ task.status === "Completed"
                         </tbody>
 
                     </table>
-
+                    {children}
                 </div>
 
             </div>
