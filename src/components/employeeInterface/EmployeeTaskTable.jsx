@@ -7,6 +7,7 @@ import {
 import { searchFilter } from "../../utils/searchFilter"
 import Pagination from "../../components/common/Pagination";
 import usePagination from "../../hooks/usePagination";
+import TableSkeleton from "../skeletons/TableSkeleton";
 
 function EmployeeTaskTable({ employeeId, search }) {
     const [tasks, setTasks] = useState([]);
@@ -106,6 +107,11 @@ function EmployeeTaskTable({ employeeId, search }) {
 
         load();
     }, [employeeId]);
+
+    if(loading){
+        return <TableSkeleton />
+    }
+
     return (
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 

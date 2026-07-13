@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import { createNotification } from "../../services/notificationService";
 import usePagination from "../../hooks/usePagination";
 import Pagination from "../../components/common/Pagination";
+import SearchSkeleton from "../../components/skeletons/SearchSkeleton";
+import TableSkeleton from "../../components/skeletons/TableSkeleton";
 
 
 function EmployeeTaskManagement() {
@@ -95,8 +97,9 @@ function EmployeeTaskManagement() {
     );
     if (!employee) {
         return (
-            <div className="p-10 text-center">
-                Loading employee...
+            <div className="mt-4 flex flex-col gap-5">
+                <SearchSkeleton />
+                <TableSkeleton />
             </div>
         );
     }

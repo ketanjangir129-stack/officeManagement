@@ -5,6 +5,7 @@ import EditTaskModal from "./EditTaskModal";
 import { toast } from "react-toastify";
 import { createUnassignNotification, } from "../../services/notificationService";
 import { FcDeleteDatabase } from "react-icons/fc";
+import TableSkeleton from "../skeletons/TableSkeleton";
 
 function EmployeeTaskTable({
     employeeId,
@@ -62,11 +63,7 @@ function EmployeeTaskTable({
     };
 
     if (loading) {
-        return (
-            <div className="rounded-2xl bg-white p-10 text-center">
-                Loading tasks...
-            </div>
-        );
+        return <TableSkeleton />
     }
     return (
        <div className="space-y-6">
