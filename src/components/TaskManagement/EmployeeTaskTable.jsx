@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { removeTaskAssignment } from "../../services/assignTaskService";
 import TaskDetailsModal from "./TaskDetailsModal";
 import EditTaskModal from "./EditTaskModal";
@@ -11,6 +11,7 @@ function EmployeeTaskTable({
     tasks,
     loading,
     reloadTasks,
+    children
 }) {
 
 
@@ -59,6 +60,7 @@ function EmployeeTaskTable({
             reloadTasks();
         }
     };
+
     if (loading) {
         return (
             <div className="rounded-2xl bg-white p-10 text-center">

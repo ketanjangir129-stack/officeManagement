@@ -10,17 +10,33 @@ import { createTask } from "../../services/taskService";
 import { assignTask } from "../../services/assignTaskService";
 import { toast } from "react-toastify";
 import { createNotification } from "../../services/notificationService";
+import usePagination from "../../hooks/usePagination";
+import Pagination from "../../components/common/Pagination";
+
+
 function EmployeeTaskManagement() {
     const { employeeId } = useParams();
     const navigate = useNavigate();
 
     const { employees } = useEmployees();
 
-
-
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
 
+
+    //using pagination
+    const {
+        currentPage,
+        totalPages,
+        paginatedData,
+        goToPage,
+        nextPage,
+        prevPage,
+        setCurrentPage,
+    } = usePagination(filteredTasks, 5);
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search, statusFilter]);
 
     const [statusFilter, setStatusFilter] = useState("all");
     const [search, setSearch] = useState("");

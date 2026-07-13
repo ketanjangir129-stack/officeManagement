@@ -4,6 +4,8 @@ import { searchFilter } from "../../utils/searchFilter"
 import TaskTable from "../../components/TaskManagement/TaskTable";
 import { subscribeTasks } from "../../services/taskService";
 import { subscribeAssignedTasks } from "../../services/assignTaskService";
+import usePagination from "../../hooks/usePagination";
+import Pagination from "../../components/common/Pagination";
 
 function TaskManagement() {
   const [tasks, setTasks] = useState([]);
@@ -67,10 +69,20 @@ function TaskManagement() {
       {/* your UI */}
 
       <TaskTable
-        tasks={filteredTasks}
+        tasks={paginatedData}
         loading={loading}
         assignedTasks={assignedTasks}
-      />
+      >
+        {/* using pagination component */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={goToPage}
+          onNext={nextPage}
+          onPrev={prevPage}
+        />
+
+      </TaskTable>
     </>
   );
 }
