@@ -8,6 +8,8 @@ import { createTask } from "../../services/taskService";
 import { assignTask } from "../../services/assignTaskService";
 import { toast } from "react-toastify";
 import { getEmployeeTasks } from "../../services/employeeTaskService";
+import { createNotification } from "../../services/notificationService"; 
+
 function EmployeeTaskManagement() {
     const { employeeId } = useParams();
     const navigate = useNavigate();
@@ -30,8 +32,7 @@ function EmployeeTaskManagement() {
     };
     const [search, setSearch] = useState("");
 
-    const [showAssignModal, setShowAssignModal] =
-        useState(false);
+    const [showAssignModal, setShowAssignModal] = useState(false);
 
     const handleAssignTask = async (taskData) => {
         try {
@@ -47,8 +48,11 @@ function EmployeeTaskManagement() {
 
             await assignTask(employee.id, result.taskId);
 
+            await createNotification(
+                employee.id,
+                result.taskId
+            );
             toast.success("Task Assigned");
-
             setShowAssignModal(false);
         } catch (error) {
             console.error(error);
