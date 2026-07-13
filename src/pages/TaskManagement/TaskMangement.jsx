@@ -64,7 +64,7 @@ function TaskManagement() {
   return (
     <>
       {/* search bar */}
-      <div className="mb-6 flex items-center gap-4">
+      <div className="flex gap-4 bg-white rounded-2xl p-4 shadow-sm">
         <SearchFilter
           value={search}
           onChange={setSearch}
@@ -74,7 +74,7 @@ function TaskManagement() {
         <select
           value={priorityFilter}
           onChange={(e) => setPriorityFilter(e.target.value)}
-          className="rounded-lg border px-4 py-2"
+          className="rounded-xl border px-4 py-2"
         >
           <option value="all">All Priority</option>
           <option value="High">High</option>

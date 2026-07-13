@@ -36,21 +36,6 @@ function EmployeeTaskManagement() {
             : searchedTasks.filter(
                 (task) => task.status === statusFilter
             );
-
-    //using pagination
-    const {
-        currentPage,
-        totalPages,
-        paginatedData,
-        goToPage,
-        nextPage,
-        prevPage,
-        setCurrentPage,
-    } = usePagination(filteredTasks, 5);
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [search, statusFilter]);
-
     const [showAssignModal, setShowAssignModal] =
         useState(false);
 
@@ -97,6 +82,21 @@ function EmployeeTaskManagement() {
         return () => unsubscribe();
     }, [employeeId]);
 
+    //using pagination
+    const {
+        currentPage,
+        totalPages,
+        paginatedData,
+        goToPage,
+        nextPage,
+        prevPage,
+        setCurrentPage,
+    } = usePagination(filteredTasks, 5);
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search, statusFilter]);
+
+    
     const employee = employees.find(
         (emp) => emp.id === employeeId
     );
@@ -152,7 +152,7 @@ function EmployeeTaskManagement() {
             </div>
 
 
-            {/* search filter  */}
+            {/* search bar  */}
             <div className="flex gap-4 bg-white rounded-2xl p-4 shadow-sm">
                 <SearchFilter
                     value={search}
@@ -165,7 +165,7 @@ function EmployeeTaskManagement() {
                     onChange={(e) => setStatusFilter(e.target.value)}
                     className="rounded-xl border px-4 py-2"
                 >
-                    <option value="all">All</option>
+                    <option value="all">All Status</option>
                     <option value="Pending">Pending</option>
                     <option value="In Progress">In Progress</option>
                     <option value="Completed">Completed</option>
@@ -175,19 +175,10 @@ function EmployeeTaskManagement() {
             {/* Task Table */}
 
             <EmployeeTaskTable
-                tasks={paginatedData}
+                tasks={filteredTasks}
                 loading={loading}
                 employeeId={employeeId}
-            >
-                {/* pagination component */}
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={goToPage}
-                    onNext={nextPage}
-                    onPrev={prevPage}
-                />
-            </EmployeeTaskTable>
+            />
 
             {/* Assign Modal */}
 
