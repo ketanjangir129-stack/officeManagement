@@ -212,7 +212,6 @@ function TaskDashboard() {
                   {paginatedData.length > 0 ? (
 
                     paginatedData.map((employee) => (
-
                       <tr
                         key={employee.id}
                         onClick={() => navigate(`/tasks/employee/${employee.id}`)}

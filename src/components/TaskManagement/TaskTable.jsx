@@ -52,24 +52,24 @@ return (
 
                     <thead className="bg-slate-100">
 
-                        <tr>
+                        <tr className="border-b border-slate-200 bg-slate-50">
 
-                            <th className="px-6 py-4 text-left">
+                            <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
                                 Title
                             </th>
 
-                            <th className="px-6 py-4 text-left">
+                            <th  className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
                                 Priority
                             </th>
 
-                            <th className="px-6 py-4 text-left">
+                            <th  className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
                                 Deadline
                             </th>
-                            <th className="px-6 py-4 text-center">
+                            <th className="px-6 py-4 text-center text-sm font-semibold uppercase text-slate-600">
   Assigned
 </th>
 
-                            <th className="px-6 py-4 text-center">
+                            <th className="px-6 py-4 text-center text-sm font-semibold uppercase text-slate-600">
                                 Actions
                             </th>
 
@@ -84,9 +84,10 @@ return (
       <tr
         key={task.taskId}
         onClick={() => handleView(task)}
-        className="cursor-pointer border-t transition hover:bg-slate-50"
+        className="cursor-pointer  
+        border-b border-slate-100 transition hover:bg-violet-50 cursor-pointer"
       >
-        <td className="px-6 py-4 font-medium">
+        <td className="px-6 py-4 font-medium text-slate-700">
           {task.title}
         </td>
 
@@ -104,7 +105,7 @@ return (
           </span>
         </td>
 
-        <td className="px-6 py-4">
+        <td className="px-6 py-4 text-slate-600">
           {new Date(task.deadline).toLocaleDateString("en-gb")}
         </td>
 <td className="px-6 py-4 text-center">

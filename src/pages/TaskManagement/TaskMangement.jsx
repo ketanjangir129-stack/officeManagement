@@ -33,20 +33,20 @@ function TaskManagement() {
   }, []);
 
 
-  
-const filteredTasks = searchedTasks.filter((task) => {
-  const statusMatch =
-    statusFilter === "all" || task.status === statusFilter;
 
-  const priorityMatch =
-    priorityFilter === "all" || task.priority === priorityFilter;
+  const filteredTasks = searchedTasks.filter((task) => {
+    const statusMatch =
+      statusFilter === "all" || task.status === statusFilter;
 
-  return statusMatch && priorityMatch;
-});
+    const priorityMatch =
+      priorityFilter === "all" || task.priority === priorityFilter;
+
+    return statusMatch && priorityMatch;
+  });
   return (
     <>
       {/* search bar */}
-      <div className="mb-6 flex items-center gap-4">
+      <div className="flex gap-4 bg-white rounded-2xl p-4 shadow-sm">
         <SearchFilter
           value={search}
           onChange={setSearch}
@@ -54,15 +54,15 @@ const filteredTasks = searchedTasks.filter((task) => {
         />
 
         <select
-  value={priorityFilter}
-  onChange={(e) => setPriorityFilter(e.target.value)}
-  className="rounded-lg border px-4 py-2"
->
-  <option value="all">All Priority</option>
-  <option value="High">High</option>
-  <option value="Medium">Medium</option>
-  <option value="Low">Low</option>
-</select>
+          value={priorityFilter}
+          onChange={(e) => setPriorityFilter(e.target.value)}
+          className="rounded-xl border px-4 py-2"
+        >
+          <option value="all">All Priority</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
       </div>
       {/* your UI */}
 
