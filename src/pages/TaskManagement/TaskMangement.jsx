@@ -56,9 +56,11 @@ function TaskManagement() {
     prevPage,
     setCurrentPage,
   } = usePagination(filteredTasks, 5);
+  
   useEffect(() => {
     setCurrentPage(1);
   }, [search, statusFilter, priorityFilter]);
+
   return (
     <>
       {/* search bar */}
