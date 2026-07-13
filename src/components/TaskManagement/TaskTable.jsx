@@ -3,6 +3,7 @@ import { globaldelete } from "../../services/assignTaskService";
 import TaskDetailsModal from "./TaskDetailsModal";
 import EditTaskModal from "./EditTaskModal";
 import { toast } from "react-toastify";
+import TableSkeleton from "../skeletons/TableSkeleton";
 
 function TaskTable({
   employeeId,
@@ -31,9 +32,7 @@ function TaskTable({
 
   if (loading) {
     return (
-      <div className="rounded-2xl bg-white p-10 text-center">
-        Loading tasks...
-      </div>
+      <TableSkeleton />
     );
   }
 

@@ -35,32 +35,25 @@ function EmployeeTaskManagement() {
             ? searchedTasks
             : searchedTasks.filter(
                 (task) => task.status === statusFilter
-            );
+    );
 
     const [showAssignModal, setShowAssignModal] =
         useState(false);
 
     const handleAssignTask = async (taskData) => {
         try {
-            const { assignedEmployees, ...taskOnlyData } =
-                taskData;
-
+            const { assignedEmployees, ...taskOnlyData } = taskData;
             const result = await createTask(taskOnlyData);
-
             if (!result.success) {
                 toast.error("Failed to create task");
                 return;
             }
-
             await assignTask(employee.id, result.taskId);
-
             await createNotification(
                 employee.id,
                 result.taskId
             );
-
             toast.success("Task Assigned Successfully");
-
             setShowAssignModal(false);
         } catch (error) {
             console.error(error);
@@ -79,7 +72,6 @@ function EmployeeTaskManagement() {
                 setLoading(false);
             }
         );
-
         return () => unsubscribe();
     }, [employeeId]);
 
@@ -112,21 +104,12 @@ function EmployeeTaskManagement() {
     return (
         <div className="space-y-6">
             <div >
-
-
-
                 <button
                     onClick={() => navigate(-1)}
                     className="mb-4 rounded-lg bg-slate-200 px-4 py-2 hover:bg-slate-300"
                 >
                     Back
                 </button>
-
-
-
-
-
-
             </div>
 
             <div className="flex items-center justify-between">
@@ -176,10 +159,19 @@ function EmployeeTaskManagement() {
             {/* Task Table */}
 
             <EmployeeTaskTable
-                tasks={filteredTasks}
+                tasks={paginatedData}
                 loading={loading}
                 employeeId={employeeId}
-            />
+            >
+                {/* using pagination component */}
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={goToPage}
+                    onNext={nextPage}
+                    onPrev={prevPage}
+                />
+            </EmployeeTaskTable>
 
             {/* Assign Modal */}
 

@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 import EmployeeStats from "../../components/employeeManagement/EmployeeStats";
 import Pagination from "../../components/common/Pagination";
 import usePagination from "../../hooks/usePagination";
+import StatsSkeleton from "../../components/skeletons/StatsSkeleton";
+import TableSkeleton from "../../components/skeletons/TableSkeleton";
+import SearchSkeleton from "../../components/skeletons/SearchSkeleton";
 
 function Employees() {
   const [openModal, setOpenModal] = useState(false);
@@ -40,24 +43,10 @@ function Employees() {
   //loader
   if (loading) {
     return (
-        <div className="flex items-center justify-center h-[70vh]">
-            <div className="text-center">
-                <div
-                    className="
-                        w-12
-                        h-12
-                        border-4
-                        border-violet-200
-                        border-t-violet-600
-                        rounded-full
-                        animate-spin
-                        mx-auto
-                    "
-                />
-                <p className="mt-4 text-slate-600">
-                    Loading employees...
-                </p>
-            </div>
+        <div className="flex flex-col gap-5 mt-5">
+          <StatsSkeleton />
+          <SearchSkeleton />
+          <TableSkeleton />
         </div>
     )
   }
@@ -267,6 +256,8 @@ function Employees() {
         open={openModal}
         onClose={() => setOpenModal(false)}
       />
+
+
     </div>
   );
 }

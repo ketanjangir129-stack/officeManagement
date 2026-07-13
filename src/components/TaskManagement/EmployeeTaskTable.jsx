@@ -187,6 +187,7 @@ function EmployeeTaskTable({
         </tbody>
 
       </table>
+      {children}
 
     </div>
   </div>

@@ -21,6 +21,8 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import TaskManagement from "./TaskMangement.jsx";
+import SearchSkeleton from "../../components/skeletons/SearchSkeleton.jsx";
+import TableSkeleton from "../../components/skeletons/TableSkeleton.jsx";
 
 function TaskDashboard() {
   const { employees, loading } = useEmployees();
@@ -104,25 +106,9 @@ function TaskDashboard() {
   //loader
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-[70vh]">
-        <div className="text-center">
-
-          <div
-            className="
-            w-12
-            h-12
-            border-4
-            border-violet-200
-            border-t-violet-600
-            rounded-full
-            animate-spin
-            mx-auto
-          "
-          />
-          <p className="mt-4 text-slate-600">
-            Loading employees...
-          </p>
-        </div>
+      <div className="flex flex-col gap-6 mt-6"> 
+        <SearchSkeleton />
+        <TableSkeleton />
       </div>
     );
   }
