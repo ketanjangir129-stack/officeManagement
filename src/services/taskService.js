@@ -37,7 +37,26 @@ export const createTask = async (taskData) => {
   }
   
 };
+export const subscribeTasks = (callback) => {
+  const tasksRef = ref(db, "tasks");
 
+  return onValue(tasksRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+
+      const taskArray = Object.entries(data).map(
+        ([taskId, value]) => ({
+          taskId,
+          ...value,
+        })
+      );
+
+      callback(taskArray);
+    } else {
+      callback([]);
+    }
+  });
+};
 
 
 export const getAllTasks = async () => {
@@ -116,10 +135,4 @@ export const updateEmployeeStatus = async(
     console.error(error);
     return false
 }
-};
-
-export const subscribeTasks = (callback) => {
-  return onValue(tasksRef, (snapshot) => {
-    callback(snapshot.val() || {});
-  });
 };

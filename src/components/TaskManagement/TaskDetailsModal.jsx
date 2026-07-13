@@ -62,7 +62,7 @@ function TaskDetailsModal({
               Description
             </p>
 
-            <div className="mt-2 rounded-xl bg-slate-100 p-4">
+            <div className="mt-2 rounded-xl bg-slate-100 p-4 text-pretty">
               {task.description}
             </div>
           </div>
@@ -98,7 +98,7 @@ function TaskDetailsModal({
               </p>
 
               <p className="mt-2 font-semibold">
-                {task.deadline}
+                {new Date(task.deadline).toLocaleDateString("en-gb")}
               </p>
 
             </div>
@@ -114,7 +114,7 @@ function TaskDetailsModal({
             </p>
 
             <p className="mt-2">
-              {new Date(task.createdAt).toLocaleString()}
+              {new Date(task.createdAt).toLocaleString("en-gb")}
             </p>
 
           </div>

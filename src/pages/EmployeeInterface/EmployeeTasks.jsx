@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useEmployees } from "../../context/EmployeeContext";
-import EmployeeStats from "../../components/employeeInterface/EmployeeStats";
+
 import EmployeeTaskTable from "../../components/employeeInterface/EmployeeTaskTable";
 import SearchFilter from "../../components/common/SearchFilter";
 import NotificationBell from "../../components/employeeInterface/NotificationBell";
@@ -42,9 +42,7 @@ function EmployeeTasks() {
         </div>
       </div>
 
-      {/* Statistics */}
 
-      <EmployeeStats employeeId={employeeId} />
 
       {/* Search */}
 
