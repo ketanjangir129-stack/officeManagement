@@ -45,6 +45,12 @@ function TaskManagement() {
 
     return statusMatch && priorityMatch;
   });
+
+  const {currentPage,totalPages,paginatedData,goToPage,nextPage,prevPage,setCurrentPage} = usePagination(filteredTasks,5);
+  useEffect(()=>{
+    setCurrentPage(1);
+  },[search,statusFilter,priorityFilter]);
+
   return (
     <>
       {/* search bar */}
