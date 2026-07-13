@@ -3,6 +3,7 @@ import { globaldelete } from "../../services/assignTaskService";
 import TaskDetailsModal from "./TaskDetailsModal";
 import EditTaskModal from "./EditTaskModal";
 import { toast } from "react-toastify";
+import TableSkeleton from "../skeletons/TableSkeleton";
 
 function TaskTable({
   employeeId,
@@ -31,9 +32,7 @@ function TaskTable({
 
   if (loading) {
     return (
-      <div className="rounded-2xl bg-white p-10 text-center">
-        Loading tasks...
-      </div>
+      <TableSkeleton />
     );
   }
 
@@ -59,7 +58,9 @@ function TaskTable({
                 <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
                   Priority
                 </th>
-
+ <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+                  Task Type
+                </th>
                 <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
                   Deadline
                 </th>
@@ -167,6 +168,7 @@ function TaskTable({
 
                       </div>
                     </td>
+
 
                   </tr>
                 ))

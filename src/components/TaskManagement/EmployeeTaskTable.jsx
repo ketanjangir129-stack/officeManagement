@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { removeTaskAssignment } from "../../services/assignTaskService";
 import TaskDetailsModal from "./TaskDetailsModal";
 import EditTaskModal from "./EditTaskModal";
 import { toast } from "react-toastify";
 import { createUnassignNotification, } from "../../services/notificationService";
 import { FcDeleteDatabase } from "react-icons/fc";
+import TableSkeleton from "../skeletons/TableSkeleton";
 
 function EmployeeTaskTable({
     employeeId,
@@ -62,11 +63,7 @@ function EmployeeTaskTable({
     };
 
     if (loading) {
-        return (
-            <div className="rounded-2xl bg-white p-10 text-center">
-                Loading tasks...
-            </div>
-        );
+        return <TableSkeleton />
     }
     return (
         <div className="space-y-6">
@@ -186,13 +183,15 @@ function EmployeeTaskTable({
 
                                             </div>
                                         </td>
+      
+     
 
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
                                     <td
-                                        colSpan={5}
+                                        colSpan={6}
                                         className="py-10 text-center text-slate-500"
                                     >
                                         No Tasks Found
@@ -202,6 +201,7 @@ function EmployeeTaskTable({
                         </tbody>
 
                     </table>
+                     {children}
 
                 </div>
             </div>

@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import { createNotification } from "../../services/notificationService";
 import usePagination from "../../hooks/usePagination";
 import Pagination from "../../components/common/Pagination";
+import SearchSkeleton from "../../components/skeletons/SearchSkeleton";
+import TableSkeleton from "../../components/skeletons/TableSkeleton";
 
 
 function EmployeeTaskManagement() {
@@ -24,8 +26,6 @@ function EmployeeTaskManagement() {
     const [loading, setLoading] = useState(true);
 
 
-    
-
     const [statusFilter, setStatusFilter] = useState("all");
     const [search, setSearch] = useState("");
     const searchedTasks = searchFilter(tasks, search, [
@@ -37,46 +37,25 @@ function EmployeeTaskManagement() {
             ? searchedTasks
             : searchedTasks.filter(
                 (task) => task.status === statusFilter
-            );
-            //using pagination
-    const {
-        currentPage,
-        totalPages,
-        paginatedData,
-        goToPage,
-        nextPage,
-        prevPage,
-        setCurrentPage,
-    } = usePagination(filteredTasks, 5);
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [search, statusFilter]);
-
+    );
 
     const [showAssignModal, setShowAssignModal] =
         useState(false);
 
     const handleAssignTask = async (taskData) => {
         try {
-            const { assignedEmployees, ...taskOnlyData } =
-                taskData;
-
+            const { assignedEmployees, ...taskOnlyData } = taskData;
             const result = await createTask(taskOnlyData);
-
             if (!result.success) {
                 toast.error("Failed to create task");
                 return;
             }
-
             await assignTask(employee.id, result.taskId);
-
             await createNotification(
                 employee.id,
                 result.taskId
             );
-
             toast.success("Task Assigned Successfully");
-
             setShowAssignModal(false);
         } catch (error) {
             console.error(error);
@@ -95,17 +74,32 @@ function EmployeeTaskManagement() {
                 setLoading(false);
             }
         );
-
         return () => unsubscribe();
     }, [employeeId]);
+
+    //using pagination
+    const {
+        currentPage,
+        totalPages,
+        paginatedData,
+        goToPage,
+        nextPage,
+        prevPage,
+        setCurrentPage,
+    } = usePagination(filteredTasks, 5);
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search, statusFilter]);
+
 
     const employee = employees.find(
         (emp) => emp.id === employeeId
     );
     if (!employee) {
         return (
-            <div className="p-10 text-center">
-                Loading employee...
+            <div className="mt-4 flex flex-col gap-5">
+                <SearchSkeleton />
+                <TableSkeleton />
             </div>
         );
     }
@@ -113,21 +107,12 @@ function EmployeeTaskManagement() {
     return (
         <div className="space-y-6">
             <div >
-
-
-
                 <button
                     onClick={() => navigate(-1)}
                     className="mb-4 rounded-lg bg-slate-200 px-4 py-2 hover:bg-slate-300"
                 >
                     Back
                 </button>
-
-
-
-
-
-
             </div>
 
             <div className="flex items-center justify-between">
@@ -177,10 +162,19 @@ function EmployeeTaskManagement() {
             {/* Task Table */}
 
             <EmployeeTaskTable
-                tasks={filteredTasks}
+                tasks={paginatedData}
                 loading={loading}
                 employeeId={employeeId}
-            />
+            >
+                {/* using pagination component */}
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={goToPage}
+                    onNext={nextPage}
+                    onPrev={prevPage}
+                />
+            </EmployeeTaskTable>
 
             {/* Assign Modal */}
 

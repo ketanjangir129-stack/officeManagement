@@ -64,7 +64,7 @@ function TaskManagement() {
         <select
           value={priorityFilter}
           onChange={(e) => setPriorityFilter(e.target.value)}
-          className="rounded-xl border px-4 py-2"
+          className="rounded-xl border px-4 py-2 border-slate-200"
         >
           <option value="all">All Priority</option>
           <option value="High">High</option>

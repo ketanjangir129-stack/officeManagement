@@ -4,6 +4,7 @@ import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import EmployeeDetailsSkeleton from "../../components/skeletons/EmployeeDetailsSkeleton";
 
 function EmployeeDetails() {
 
@@ -125,28 +126,7 @@ function EmployeeDetails() {
 
     if (loading || deleting) {
         return (
-            <div className="flex items-center justify-center h-[70vh]">
-                <div className="text-center">
-                    <div
-                        className="
-                            w-12
-                            h-12
-                            border-4
-                            border-violet-200
-                            border-t-violet-600
-                            rounded-full
-                            animate-spin
-                            mx-auto
-                        "
-                    />
-
-                    <p className="mt-4 text-slate-600">
-                        {deleting
-                            ? "Deleting Employee..."
-                            : "Loading Employee..."}
-                    </p>
-                </div>
-            </div>
+            <EmployeeDetailsSkeleton />
         );
     }
     if (!employee) {

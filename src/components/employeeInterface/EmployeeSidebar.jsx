@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useEmployees } from "../../context/EmployeeContext";
 import { useNavigate } from "react-router-dom";
+import EmployeeSidebarSkeleton from "../skeletons/EmployeeSidebarSkeleton";
 
 function EmployeeSidebar() {
 
@@ -11,18 +12,14 @@ function EmployeeSidebar() {
         (emp) => emp.id === employeeId
     );
     
-    if (loading) {
-    return (
-        <aside className="w-80 flex items-center justify-center bg-slate-800 text-white">
-            Loading...
-        </aside>
-    );
-    useEffect(() => {
-    if (!loading && !employee) {
-        navigate("/employees-login");
+    if (loading) {return <EmployeeSidebarSkeleton />;
+
+        useEffect(() => {
+            if (!loading && !employee) {
+                navigate("/employees-login");
+            }
+        }, [employee, loading]);
     }
-}, [employee, loading]);
-}
 
     const handleLogout = async () => {
         console.log("Logout clicked");
