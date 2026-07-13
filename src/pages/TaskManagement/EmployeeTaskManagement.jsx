@@ -24,19 +24,7 @@ function EmployeeTaskManagement() {
     const [loading, setLoading] = useState(true);
 
 
-    //using pagination
-    const {
-        currentPage,
-        totalPages,
-        paginatedData,
-        goToPage,
-        nextPage,
-        prevPage,
-        setCurrentPage,
-    } = usePagination(filteredTasks, 5);
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [search, statusFilter]);
+    
 
     const [statusFilter, setStatusFilter] = useState("all");
     const [search, setSearch] = useState("");
@@ -50,6 +38,21 @@ function EmployeeTaskManagement() {
             : searchedTasks.filter(
                 (task) => task.status === statusFilter
             );
+            //using pagination
+    const {
+        currentPage,
+        totalPages,
+        paginatedData,
+        goToPage,
+        nextPage,
+        prevPage,
+        setCurrentPage,
+    } = usePagination(filteredTasks, 5);
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search, statusFilter]);
+
+    
     const [showAssignModal, setShowAssignModal] =
         useState(false);
 
