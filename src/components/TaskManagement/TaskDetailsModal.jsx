@@ -54,7 +54,45 @@ function TaskDetailsModal({
               {task.title}
             </h3>
           </div>
+          <div className="flex justify-start items-center gap-10">
+            <div>
 
+              <p className="text-sm text-slate-500">
+                Priority
+              </p>
+
+              <div className="mt-2">
+
+                <span
+                  className={`rounded-full px-4 py-2 text-sm font-semibold ${priorityColor[task.priority]
+                    }`}
+                >
+                  {task.priority}
+                </span>
+
+              </div>
+
+            </div>
+            <div >
+
+              <p className="text-sm text-slate-500">
+                Task Type
+              </p>
+
+              <div className="mt-2">
+                <span
+                  className={`rounded-full px-3 py-1 text-sm font-medium ${task.taskType === "single"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-blue-100 text-blue-700"
+                    }`}
+                >
+                  {task.taskType === "single"
+                    ? "Single"
+                    : "Collaborative"}
+                </span>
+              </div>
+            </div>
+          </div>
           {/* Description */}
 
           <div>
@@ -70,26 +108,20 @@ function TaskDetailsModal({
           {/* Priority + Deadline */}
 
           <div className="grid gap-5 md:grid-cols-2">
+             {/* Created */}
 
-            <div>
+          <div>
 
-              <p className="text-sm text-slate-500">
-                Priority
-              </p>
+            <p className="text-sm text-slate-500">
+              Created On
+            </p>
 
-              <div className="mt-2">
+            <p className="mt-2">
+              {new Date(task.createdAt).toLocaleString("en-gb")}
+            </p>
 
-                <span
-                  className={`rounded-full px-4 py-2 text-sm font-semibold ${
-                    priorityColor[task.priority]
-                  }`}
-                >
-                  {task.priority}
-                </span>
+          </div>
 
-              </div>
-
-            </div>
 
             <div>
 
@@ -105,19 +137,7 @@ function TaskDetailsModal({
 
           </div>
 
-          {/* Created */}
-
-          <div>
-
-            <p className="text-sm text-slate-500">
-              Created On
-            </p>
-
-            <p className="mt-2">
-              {new Date(task.createdAt).toLocaleString("en-gb")}
-            </p>
-
-          </div>
+         
 
           {/* Updated */}
 

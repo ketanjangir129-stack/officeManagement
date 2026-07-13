@@ -3,6 +3,7 @@ import TaskForm from "./TaskForm";
 function AssignTaskModal({
   isOpen,
   employee,
+  employees,
   onClose,
   onSubmit,
 }) {
@@ -82,6 +83,7 @@ function AssignTaskModal({
           <div className="p-6">
             <TaskForm
               employee={employee}
+              employees={employees}
               hideEmployeeSelection={true}
               onSubmit={onSubmit}
             />

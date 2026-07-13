@@ -52,7 +52,7 @@ function EmployeeTaskManagement() {
         setCurrentPage(1);
     }, [search, statusFilter]);
 
-    
+
     const [showAssignModal, setShowAssignModal] =
         useState(false);
 
@@ -187,6 +187,7 @@ function EmployeeTaskManagement() {
             <AssignTaskModal
                 isOpen={showAssignModal}
                 employee={employee}
+                employees={employees}
                 onClose={() => setShowAssignModal(false)}
                 onSubmit={handleAssignTask}
             />

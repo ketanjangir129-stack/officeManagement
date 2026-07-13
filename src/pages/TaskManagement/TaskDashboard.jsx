@@ -56,7 +56,7 @@ function TaskDashboard() {
   //resets pagination when searching employees
   useEffect(() => {
     setCurrentPage(1);
-  }, [search,setCurrentPage]);
+  }, [search, setCurrentPage]);
 
   // Open Modal
   const handleAssignClick = (employee) => {
@@ -82,8 +82,18 @@ function TaskDashboard() {
         return;
       }
 
-      await assignTask(selectedEmployee.id, result.taskId);
+      const employeeIds = Object.keys(
+        taskData.assignedEmployees
+      );
 
+      for (const employeeId of employeeIds) {
+        await assignTask(employeeId, result.taskId);
+
+        await createNotification(
+          employeeId,
+          result.taskId
+        );
+      }
       await createNotification(
         selectedEmployee.id,
         result.taskId
@@ -93,7 +103,7 @@ function TaskDashboard() {
 
       closeModal();
 
-      
+
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong");
@@ -281,7 +291,7 @@ function TaskDashboard() {
                 </tbody>
 
               </table>
-                
+
               {/* Pagination component */}
               <Pagination
                 currentPage={currentPage}
@@ -292,12 +302,13 @@ function TaskDashboard() {
               />
             </div>
           </div>
-         
+
 
           {/* Assign Task Modal */}
           <AssignTaskModal
             isOpen={showAssignModal}
             employee={selectedEmployee}
+            employees={employees}
             onClose={closeModal}
             onSubmit={handleAssignTask}
           />
