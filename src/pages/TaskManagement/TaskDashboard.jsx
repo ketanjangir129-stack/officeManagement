@@ -96,7 +96,6 @@ function TaskDashboard() {
           result.taskId
         );
       }
-
       toast.success("Task Assigned Successfully");
 
       closeModal();

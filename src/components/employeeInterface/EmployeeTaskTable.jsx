@@ -157,7 +157,7 @@ function EmployeeTaskTable({ employeeId, search }) {
                                     className="border-b border-slate-100 transition hover:bg-violet-50"
                                 >
 
-                                    <td className="px-6 py-4 font-medium text-slate-700">
+                                    <td className="px-6 py-4 font-medium text-slate-700 max-w-[350px] truncate">
 
                                         {task.title}
 

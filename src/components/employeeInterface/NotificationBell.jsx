@@ -8,7 +8,7 @@ function NotificationBell(){
     const employeeId = localStorage.getItem("employeeId");
     const [notifications, setNotifications] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
-    const [tasks, setTasks] = useState({});
+    const [tasks, setTasks] = useState([]);
 
     const unreadCount = notifications.filter(
         (notification) => !notification.read
@@ -72,6 +72,14 @@ function NotificationBell(){
         } catch (error) {
             console.error(error);
         }
+    };
+
+    const getTaskTitle = (taskId) => {
+        const task = tasks.find(
+            (t) => t.taskId === taskId
+        );
+
+        return task?.title || "Task";
     };
 
     return(
@@ -170,8 +178,8 @@ function NotificationBell(){
                                                     {notification.message}
                                                 </div>
 
-                                                <h4 className="mt-2 font-semibold text-slate-800">
-                                                    {tasks[notification.taskId]?.title || "Task"}
+                                                <h4 className="mt-2 font-semibold text-slate-800 max-w-[150px] truncate">
+                                                    {getTaskTitle(notification.taskId)} 
                                                 </h4>
                                             </div>
 

@@ -1,40 +1,51 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useEmployees } from "../../context/EmployeeContext";
 import { useNavigate } from "react-router-dom";
+import { FiLogOut } from "react-icons/fi";
+import { FiLock } from "react-icons/fi";
 import EmployeeSidebarSkeleton from "../skeletons/EmployeeSidebarSkeleton";
+import ChangePasswordModal from "./ChangePasswordModal";
+import { toast } from "react-toastify";
 
 function EmployeeSidebar() {
 
     const navigate = useNavigate();
-    const employeeId =localStorage.getItem("employeeId");
-    const { employees,updateOnlineStatus,loading } = useEmployees();
+
+    const [showMenu, setShowMenu] = useState(false);
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+
+    const employeeId = sessionStorage.getItem("employeeId");
+    const { employees, updateOnlineStatus, loading } = useEmployees();
     const employee = employees.find(
         (emp) => emp.id === employeeId
     );
-    
-    if (loading) {return <EmployeeSidebarSkeleton />;
 
-        useEffect(() => {
-            if (!loading && !employee) {
-                navigate("/employees-login");
-            }
-        }, [employee, loading]);
+    if (loading) {
+        return <EmployeeSidebarSkeleton />;
     }
+    useEffect(() => {
+        if (!loading && !employee) {
+            navigate("/employees-login");
+        }
+    }, [employee, loading]);
 
     const handleLogout = async () => {
-        console.log("Logout clicked");
-        const employeeId = localStorage.getItem("employeeId");
-        console.log("Employee ID:", employeeId);
-        if (employeeId) {
-            await updateOnlineStatus(employeeId, false);
-            console.log("Status updated");
+        try {
+            setShowMenu(false);
+            if (employeeId) {
+                await updateOnlineStatus(employeeId,false);
+            }
+            sessionStorage.removeItem("employeeId");
+            sessionStorage.removeItem("user");
+            navigate("/login");
+            toast.success("Logged out successfully");
+        } catch (error) {
+            console.error(error);
         }
-        localStorage.removeItem("employeeId");  
-        navigate("/employees-login");
     };
 
     return (
-        <aside className="w-80 bg-slate-800 text-white border-r border-slate-200 flex flex-col">
+        <aside className="w-80 bg-slate-800 text-white border-r border-slate-200 flex flex-col h-screen overflow-hidden">
 
             {/* Profile */}
 
@@ -59,7 +70,7 @@ function EmployeeSidebar() {
 
             {/* Employee Info */}
 
-            <div className="flex-1 p-6 space-y-5">
+            <div className="flex-1 p-6 space-y-5 overflow-y-auto hide-scrollbar">
 
                 <Info
                     title="Employee ID"
@@ -83,18 +94,69 @@ function EmployeeSidebar() {
 
             </div>
 
-            {/* Logout */}
-
-            <div className="p-6 border-t border-slate-700">
+            {/* Profile Section  */}
+            <div className="p-4 border-t border-slate-700 relative shrink-0">
 
                 <button
-                    onClick={handleLogout}
-                    className="w-full py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 transition cursor-pointer"
+                    onClick={() =>
+                        setShowMenu(!showMenu)
+                    }
+                    className="w-full flex items-center justify-between bg-slate-700 hover:bg-slate-600 rounded-2xl p-3 transition cursor-pointer"
                 >
-                    Logout
+
+                    <div className="flex items-center gap-3">
+
+                        <div className="w-10 h-10 rounded-full bg-violet-500 flex items-center justify-center font-bold">
+                            {employee?.fullName
+                                ?.charAt(0)
+                                ?.toUpperCase()}
+                        </div>
+
+                        <div className="text-left">
+                            <p className="font-semibold">
+                                {employee?.fullName}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    
                 </button>
 
+                {showMenu && (
+                    <div className="absolute bottom-[88px] left-4 right-4 bg-slate-700 rounded-2xl shadow-xl overflow-hidden">
+                        <button
+                            onClick={() => {
+                                setShowPasswordModal(true);
+                                setShowMenu(false);
+                            }}
+                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-600 transition cursor-pointer"
+                        >
+                            <FiLock />
+                            Change Password
+                        </button>
+
+                        <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center gap-3 px-4 py-3 text-red-300 hover:bg-slate-600 transition cursor-pointer"
+                        >
+                            <FiLogOut />
+                            Logout
+                        </button>
+
+                    </div>
+                )}
             </div>
+
+            {/* change password modal */}
+            {showPasswordModal && (
+                <ChangePasswordModal
+                    employee={employee}
+                    onClose={() =>
+                    setShowPasswordModal(false)
+                    }
+                />
+            )}
 
         </aside>
     );
