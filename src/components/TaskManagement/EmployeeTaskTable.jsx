@@ -76,7 +76,7 @@ function EmployeeTaskTable({
                             <tr className="border-b border-slate-200">
 
                                 <th className=" px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
-                                    Title
+                                    Title 
                                 </th>
 
                                 <th className=" px-6 py-4 text-center text-sm font-semibold uppercase text-slate-600">
@@ -111,7 +111,7 @@ function EmployeeTaskTable({
                                         className="cursor-pointer border-b border-slate-100 transition hover:bg-violet-50"
                                     >
 
-                                        <td className="px-6 py-4  font-medium text-slate-700">
+                                        <td className="px-6 py-4  font-medium text-slate-700 max-w-[350px] truncate">
                                             {task.title}
                                         </td>
 

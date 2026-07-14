@@ -52,13 +52,13 @@ function TaskTable({
               <tr className="border-b border-slate-200 bg-slate-50">
 
                 <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
-                  Title
+                  Title 
                 </th>
 
                 <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
                   Priority
                 </th>
- <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
                   Task Type
                 </th>
                 <th className="px-6 py-4 text-left text-sm font-semibold uppercase text-slate-600">
@@ -83,17 +83,17 @@ function TaskTable({
                     onClick={() => handleView(task)}
                     className="cursor-pointer border-b border-slate-100 transition hover:bg-violet-50"
                   >
-                    <td className="px-6 py-4 font-medium text-slate-700">
+                    <td className="px-6 py-4 font-medium text-slate-700 max-w-[350px] truncate">
                       {task.title}
                     </td>
 
                     <td className="px-6 py-4">
                       <span
                         className={`rounded-full px-3 py-1 text-sm font-semibold ${task.priority === "High"
-                            ? "bg-red-100 text-red-700"
-                            : task.priority === "Medium"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-green-100 text-green-700"
+                          ? "bg-red-100 text-red-700"
+                          : task.priority === "Medium"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-green-100 text-green-700"
                           }`}
                       >
                         {task.priority}
@@ -102,8 +102,8 @@ function TaskTable({
                     <td className="px-6 py-4">
                       <span
                         className={`rounded-full px-3 py-1 text-sm font-medium ${task.taskType === "single"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-blue-100 text-blue-700"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-blue-100 text-blue-700"
                           }`}
                       >
                         {task.taskType === "single"
