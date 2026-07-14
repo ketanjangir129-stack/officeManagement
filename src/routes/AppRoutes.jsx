@@ -4,38 +4,38 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import Employees from "../pages/EmployeesManagement/Employees";
 import TaskDashboard from "../pages/TaskManagement/TaskDashboard";
 import EmployeeDetails from "../pages/EmployeesManagement/EmployeeDetails";
-import EmployeeLogin from "../pages/EmployeeInterface/EmployeeLogin";
 import EmployeeProtectedRoute from "./EmployeeProtectedRoute";
 import EmployeeLayout from "../layouts/EmployeeLayout";
 import EmployeeTasks from "../pages/EmployeeInterface/EmployeeTasks";
 import EmployeeTaskManagement from "../pages/TaskManagement/EmployeeTaskManagement";
+import Login from "../pages/Auth/Login";
+import AdminProtectedRoute from "./AdminProtectedRoute";
 
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/login" element={<Login />} />
 
       {/* Admin Routes */}
-      <Route element={<DashboardLayout />}>
-        {/* <Route path="/" element={<Dashboard />}/> */}
-        <Route path="/" element={<Navigate to="/employees" replace />} />
+      <Route
+        element={
+          <AdminProtectedRoute>
+            <DashboardLayout />
+          </AdminProtectedRoute>
+        }
+      >
         <Route path="/employees" element={<Employees />} />
         <Route path="/employees/:id" element={<EmployeeDetails />} />
         <Route path="/tasks" element={<TaskDashboard />} />
-
         <Route
-          path="/tasks/employee/:employeeId" element={<EmployeeTaskManagement />}
+          path="/tasks/employee/:employeeId"
+          element={<EmployeeTaskManagement />}
         />
       </Route>
-{/* <Route
-    path="/tasks/employee/:id"
-    element={<EmployeeTaskManagement />}
-/> */}
 
-      {/* Employee Login */}
-      <Route path="/employees-login" element={<EmployeeLogin />} />
-
-      {/* Employee Portal */}
-
+      {/* Employee Routes */}
       <Route
         element={
           <EmployeeProtectedRoute>

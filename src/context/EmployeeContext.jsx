@@ -81,6 +81,9 @@ export const EmployeeProvider = ({ children }) => {
 
       await set(employeeRef, {
         ...employeeData,
+        password:employeeData.employeeId,
+        passwordChanged: false,
+        role:"employee",
         createdAt: Date.now(),
       });
 

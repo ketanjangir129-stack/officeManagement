@@ -4,16 +4,19 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from "react-router-dom";
 import {EmployeeProvider} from "./context/EmployeeContext.jsx";
+import {AuthProvider} from "./context/AuthContext.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <EmployeeProvider>
-      <BrowserRouter>
-        <App />
-        <ToastContainer position="bottom-right" />
-      </BrowserRouter>
-    </EmployeeProvider>
+    <AuthProvider>
+      <EmployeeProvider>
+        <BrowserRouter>
+          <App />
+          <ToastContainer position="bottom-right" />
+        </BrowserRouter>
+      </EmployeeProvider>
+    </AuthProvider>
   </StrictMode>,
 )
