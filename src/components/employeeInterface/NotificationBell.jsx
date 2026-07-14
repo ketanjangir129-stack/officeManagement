@@ -5,7 +5,7 @@ import { subscribeTasks } from "../../services/taskService";
 
 function NotificationBell(){
 
-    const employeeId = localStorage.getItem("employeeId");
+    const employeeId = sessionStorage.getItem("employeeId");
     const [notifications, setNotifications] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
     const [tasks, setTasks] = useState([]);
