@@ -8,7 +8,7 @@ import NotificationBell from "../../components/employeeInterface/NotificationBel
 function EmployeeTasks() {
   const { employees } = useEmployees();
 
-  const employeeId = localStorage.getItem("employeeId");
+  const employeeId = sessionStorage.getItem("employeeId");
 
   const employee = employees.find(
     (emp) => emp.id === employeeId
