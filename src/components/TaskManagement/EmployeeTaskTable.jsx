@@ -9,6 +9,7 @@ import TableSkeleton from "../skeletons/TableSkeleton";
 
 function EmployeeTaskTable({
     employeeId,
+    employees,
     tasks,
     loading,
     reloadTasks,
@@ -215,6 +216,7 @@ function EmployeeTaskTable({
             <EditTaskModal
                 isOpen={showEdit}
                 task={selectedTask}
+                employees={employees}
                 onClose={() => setShowEdit(false)}
                 onUpdated={reloadTasks}
             />

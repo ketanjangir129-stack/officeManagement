@@ -1,14 +1,14 @@
 import TaskForm from "./TaskForm";
 import { updateTask } from "../../services/taskService";
 import { toast } from "react-toastify";
-
+import { useEmployees } from "../../context/EmployeeContext";
 function EditTaskModal({
   isOpen,
   task,
   onClose,
 }) {
   if (!isOpen || !task) return null;
-
+ const { employees } = useEmployees();
   const handleUpdate = async (updatedTask) => {
   const success = await updateTask(
     task.taskId,
@@ -57,8 +57,9 @@ function EditTaskModal({
 
           <TaskForm
             initialData={task}
+            employees={ employees}
             onSubmit={handleUpdate}
-            hideEmployeeSelection={true}
+            hideEmployeeSelection={false}
           />
 
         </div>

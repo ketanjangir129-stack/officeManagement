@@ -165,6 +165,7 @@ function EmployeeTaskManagement() {
                 tasks={paginatedData}
                 loading={loading}
                 employeeId={employeeId}
+                employees={employees}
             >
                 {/* using pagination component */}
                 <Pagination

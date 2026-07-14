@@ -180,7 +180,7 @@ function EmployeeTaskTable({ employeeId, search }) {
                                     </td>
 
                                     <td className="px-6 py-4 text-slate-600">
-                                        {task.deadline}
+                                        {new Date(task.deadline).toLocaleDateString("en-gb")}
                                     </td>
 
                                     <td className="px-6 py-4">

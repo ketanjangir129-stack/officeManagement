@@ -126,3 +126,40 @@ export const updateTask = async (taskId, updatedTask) => {
     return false;
   }
 };
+
+export const getAssignedEmployees = async (taskId) => {
+  try {
+    // Get all task assignments
+    const assignSnapshot = await get(ref(db, "assignTask"));
+
+    // Get all employees
+    const employeeSnapshot = await get(ref(db, "employees"));
+
+    if (!assignSnapshot.exists() || !employeeSnapshot.exists()) {
+      return [];
+    }
+
+    const assignments = assignSnapshot.val();
+    const employees = employeeSnapshot.val();
+
+    const assignedEmployees = [];
+
+    for (const employeeId in assignments) {
+      if (assignments[employeeId][taskId]) {
+        if (employees[employeeId]) {
+          assignedEmployees.push({
+            id: employeeId,
+            ...employees[employeeId],
+            status: assignments[employeeId][taskId].status,
+            assignedAt: assignments[employeeId][taskId].assignedAt,
+          });
+        }
+      }
+    }
+
+    return assignedEmployees;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};

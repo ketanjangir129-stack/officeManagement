@@ -1,8 +1,23 @@
+import { useEffect, useState } from "react";
+import { getAssignedEmployees } from "../../services/assignTaskService";
+
 function TaskDetailsModal({
   isOpen,
   task,
   onClose,
 }) {
+  const [employees, setEmployees] = useState([]);
+  useEffect(() => {
+    if (!task) return;
+
+    const loadEmployees = async () => {
+      const data = await getAssignedEmployees(task.taskId);
+      setEmployees(data);
+    };
+
+    loadEmployees();
+  }, [task]);
+
   if (!isOpen || !task) return null;
 
   const priorityColor = {
@@ -10,6 +25,7 @@ function TaskDetailsModal({
     Medium: "bg-yellow-100 text-yellow-700",
     Low: "bg-green-100 text-green-700",
   };
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -40,8 +56,8 @@ function TaskDetailsModal({
         </div>
 
         {/* Body */}
-
-        <div className="space-y-6 p-6">
+<div className="max-h-[calc(90vh-80px)] overflow-y-auto hide-scrollbar">
+        <div className="space-y-6 p-6 overflow-y-auto ">
 
           {/* Title */}
 
@@ -104,23 +120,65 @@ function TaskDetailsModal({
               {task.description}
             </div>
           </div>
+          {/* Assigned Employees */}
 
+          <div>
+            <p className="mb-3 text-sm text-slate-500">
+              Assigned Employees
+            </p>
+
+            {employees.length > 0 ? (
+              <div className="space-y-3 max-h-42 overflow-y-auto hide-scrollbar">
+                {employees.map((employee) => (
+                  <div
+                    key={employee.id}
+                    className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-3"
+                  >
+                    <div>
+                      <p className="font-semibold text-slate-800">
+                        {employee.fullName}
+                      </p>
+
+                      <p className="text-sm text-slate-500">
+                        {employee.designation}
+                      </p>
+                    </div>
+
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${employee.status === "Completed"
+                          ? "bg-green-100 text-green-700"
+                          : employee.status === "In Progress"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-blue-100 text-blue-700"
+                        }`}
+                    >
+                      {employee.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-slate-300 p-4 text-center text-slate-500">
+                No employees assigned.
+              </div>
+            )}
+          </div>
           {/* Priority + Deadline */}
 
           <div className="grid gap-5 md:grid-cols-2">
-             {/* Created */}
+            {/* Created */}
 
-          <div>
+            <div>
 
-            <p className="text-sm text-slate-500">
-              Created On
-            </p>
+              <p className="text-sm text-slate-500">
+                Created On
+              </p>
 
-            <p className="mt-2">
-              {new Date(task.createdAt).toLocaleString("en-gb")}
-            </p>
+              <p className="mt-2">
+                {new Date(task.createdAt).toLocaleString("en-gb")}
+              </p>
 
-          </div>
+            </div>
 
 
             <div>
@@ -137,7 +195,7 @@ function TaskDetailsModal({
 
           </div>
 
-         
+
 
           {/* Updated */}
 
@@ -169,7 +227,7 @@ function TaskDetailsModal({
         </div>
 
       </div>
-
+</div>
     </div>
   );
 }

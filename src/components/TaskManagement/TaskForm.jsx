@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import EmployeeDropdown from "./Taskdropdown"
 function TaskForm({
   initialData = {},
@@ -30,25 +30,60 @@ function TaskForm({
 
   const [errors, setErrors] = useState({});
 
+useEffect(() => {
+  if (employee) {
+    setFormData((prev) => ({
+      ...prev,
+      assignedEmployees: {
+        [employee.id]: {
+          name: employee.fullName,
+          status: "Pending",
+          assignedAt: Date.now(),
+          updatedAt: null,
+        },
+      },
+    }));
+  }
+}, [employee]);
+
   // ------------------------
   // Handle Input Change
   // ------------------------
+const handleChange = (e) => {
+  const { name, value } = e.target;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  setFormData((prev) => {
+    if (name === "taskType") {
 
-    setFormData((prev) => ({
+      // If editing from Task Management, don't reset employees
+      if (!employee) {
+        return {
+          ...prev,
+          taskType: value,
+        };
+      }
+
+      // If assigning from Employee page
+      return {
+        ...prev,
+        taskType: value,
+        assignedEmployees: {
+          [employee.id]: {
+            name: employee.fullName,
+            status: "Pending",
+            assignedAt: Date.now(),
+            updatedAt: null,
+          },
+        },
+      };
+    }
+
+    return {
       ...prev,
       [name]: value,
-    }));
-    // Remove error only when actual value exists
-    if (value.trim()) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
-  };
+    };
+  });
+};
 
   // ------------------------
   // Select Employee
@@ -159,20 +194,6 @@ function TaskForm({
       onSubmit={handleSubmit}
       className="space-y-6"
     >
-      {/* Header */}
-
-      <div>
-        <h2 className="text-2xl font-bold text-slate-800">
-          Create Task
-        </h2>
-
-        <p className="text-sm text-slate-500">
-          Assign a new task to employees.
-        </p>
-      </div>
-
-      {/* Title */}
-
       <div>
         <label className="mb-2 block font-medium">
           Task Title
@@ -215,80 +236,19 @@ function TaskForm({
         </select>
       </div>
       {/* Employee Selection */}
+{!hideEmployeeSelection && formData.taskType === "collaborative" && (
+  <div>
+    <label className="mb-3 block font-medium">
+      Assign Employees
+    </label>
 
-      {(!hideEmployeeSelection || formData.taskType === "collaborative") && (
-
-        <div>
-
-          <label className="mb-3 block font-medium">
-            Assign Employees
-          </label>
-
-          
-
-            {employees.length === 0 ? (
-
-              <p className="text-slate-500">
-                No employees available
-              </p>
-
-            ) : (
-              formData.taskType === "single" ? (
-                employees.map((emp) => (
-                  <label
-                    key={emp.id}
-                    className="flex cursor-pointer items-center gap-3 rounded-lg p-2 hover:bg-slate-100"
-                  >
-                    <input
-                      type="radio"
-                      name="selectedEmployee"
-                      checked={!!formData.assignedEmployees[emp.id]}
-                      onChange={() =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          assignedEmployees: {
-                            [emp.id]: {
-                              name: emp.fullName,
-                              status: "Pending",
-                              assignedAt: Date.now(),
-                              updatedAt: null,
-                            },
-                          },
-                        }))
-                      }
-                    />
-
-                    <span>{emp.fullName}</span>
-
-                    <span className="text-sm text-slate-500">
-                      ({emp.employeeId})
-                    </span>
-                  </label>
-                ))
-              ) : (
-                <EmployeeDropdown
-                  employees={employees}
-                  selectedEmployees={formData.assignedEmployees}
-                  onToggleEmployee={handleEmployeeSelect}
-                />
-              )
-            )}
-
-
-          
-
-          {errors.assignedEmployees && (
-
-            <p className="mt-2 text-sm text-red-500">
-              {errors.assignedEmployees}
-            </p>
-
-          )}
-
-        </div>
-
-      )}
-
+    <EmployeeDropdown
+      employees={employees}
+      selectedEmployees={formData.assignedEmployees}
+      onToggleEmployee={handleEmployeeSelect}
+    />
+  </div>
+)}
 
       {/* Description */}
 

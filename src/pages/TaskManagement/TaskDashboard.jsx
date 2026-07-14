@@ -96,10 +96,6 @@ function TaskDashboard() {
           result.taskId
         );
       }
-      await createNotification(
-        selectedEmployee.id,
-        result.taskId
-      );
 
       toast.success("Task Assigned Successfully");
 

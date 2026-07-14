@@ -84,7 +84,7 @@ function AssignTaskModal({
             <TaskForm
               employee={employee}
               employees={employees}
-              hideEmployeeSelection={true}
+              hideEmployeeSelection={false}
               onSubmit={onSubmit}
             />
           </div>
