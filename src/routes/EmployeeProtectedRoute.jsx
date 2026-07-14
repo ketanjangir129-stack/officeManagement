@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 function EmployeeProtectedRoute({ children }) {
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(sessionStorage.getItem("user"));
     const { employees, loading } = useEmployees();
 
     const employee = employees.find(
@@ -19,8 +19,8 @@ function EmployeeProtectedRoute({ children }) {
             user.role === "employee" &&
             !employee
         ) {
-            localStorage.removeItem("user");
-            localStorage.removeItem("employeeId");
+            sessionStorage.removeItem("user");
+            sessionStorage.removeItem("employeeId");
             window.location.href = "/login";
         }
 

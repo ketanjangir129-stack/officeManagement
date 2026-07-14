@@ -1,13 +1,13 @@
 import {createContext,useContext,useState} from "react";
 
-import { ref, get, update } from "firebase/database";
+import { ref, get, update, onDisconnect } from "firebase/database";
 import { db } from "../firebase/firebase";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
 
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+    const [user, setUser] = useState(JSON.parse(sessionStorage.getItem("user")));
 
     const login = async (
         username,
@@ -36,7 +36,7 @@ export const AuthProvider = ({children}) => {
                 username
             };
 
-            localStorage.setItem(
+            sessionStorage.setItem(
                 "user",
                 JSON.stringify(adminData)
             );
@@ -67,14 +67,18 @@ export const AuthProvider = ({children}) => {
         if (employee) {
 
             const [id, data] = employee;
+
             // Make Employee Active / Online
-            await update(
-                ref(db, `employees/${id}`),
-                {
-                    isOnline: true
-                }
-            );
-            
+            const employeeRef = ref(db,`employees/${id}`);
+
+            await update(employeeRef, {
+                isOnline: true
+            });
+
+            // Auto Offline when connection closes
+            onDisconnect(employeeRef).update({
+                isOnline: false
+            });
 
             const employeeData = {
                 id,
@@ -83,15 +87,9 @@ export const AuthProvider = ({children}) => {
                     data.employeeId
             };
 
-            localStorage.setItem(
-                "user",
-                JSON.stringify(employeeData)
-            );
+            sessionStorage.setItem("user",JSON.stringify(employeeData));
 
-            localStorage.setItem(
-                "employeeId",
-                id
-            );
+            sessionStorage.setItem("employeeId",id);
 
             setUser(employeeData);
 
@@ -108,8 +106,8 @@ export const AuthProvider = ({children}) => {
 
     const logout = () => {
 
-        localStorage.removeItem("user");
-        localStorage.removeItem("employeeId");
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("employeeId");
         setUser(null);
     };
 

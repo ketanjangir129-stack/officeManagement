@@ -47,8 +47,7 @@ function Login() {
             }
 
             if (result.role === "employee") {
-                const employeeId =
-                    localStorage.getItem("employeeId");
+                const employeeId = sessionStorage.getItem("employeeId");
 
                 const snapshot = await get(
                     ref(db, `employees/${employeeId}`)
@@ -69,7 +68,7 @@ function Login() {
     };
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = JSON.parse(sessionStorage.getItem("user"));
         if (!user) return;
         if (user.role === "admin") {
             navigate("/employees");

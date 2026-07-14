@@ -14,7 +14,7 @@ function EmployeeSidebar() {
     const [showMenu, setShowMenu] = useState(false);
     const [showPasswordModal, setShowPasswordModal] = useState(false);
 
-    const employeeId = localStorage.getItem("employeeId");
+    const employeeId = sessionStorage.getItem("employeeId");
     const { employees, updateOnlineStatus, loading } = useEmployees();
     const employee = employees.find(
         (emp) => emp.id === employeeId
@@ -35,8 +35,8 @@ function EmployeeSidebar() {
             if (employeeId) {
                 await updateOnlineStatus(employeeId,false);
             }
-            localStorage.removeItem("employeeId");
-            localStorage.removeItem("user");
+            sessionStorage.removeItem("employeeId");
+            sessionStorage.removeItem("user");
             navigate("/login");
             toast.success("Logged out successfully");
         } catch (error) {
